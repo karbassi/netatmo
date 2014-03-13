@@ -469,45 +469,4 @@ netatmo.prototype.setThermpoint = function(options, callback) {
   return this;
 };
 
-
 module.exports = netatmo;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
