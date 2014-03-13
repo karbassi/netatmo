@@ -1,0 +1,30 @@
+{
+  "name": "netatmo",
+  "version": "1.0.0",
+  "description": "A node.js module to hook into the netatmo API.",
+  "main": "netatmo.js",
+  "scripts": {
+    "test": "rm -rf ./node_modules && npm install && node test.js"
+  },
+  "author": {
+    "name": "Ali Karbassi",
+    "email": "ali@karbassi.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/karbassi/netatmo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/karbassi/netatmo/issues"
+  },
+  "homepage": "https://github.com/karbassi/netatmo",
+  "keywords": [
+    "netatmo",
+    "netatmo api"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "moment": "^2.5.1",
+    "request": "^2.34.0"
+  }
+}
