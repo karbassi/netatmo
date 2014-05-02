@@ -227,10 +227,17 @@ netatmo.prototype.getMeasure = function(options, callback) {
     }
 
     if (options.date_begin) {
+      if (options.date_begin <= 1E10) {
+        options.date_begin *= 1E3;
+      }
+
       form.date_begin = moment(options.date_begin).utc().unix();
     }
 
     if (options.date_end) {
+      if (options.date_end <= 1E10) {
+        options.date_end *= 1E3;
+      }
       form.date_end = moment(options.date_end).utc().unix();
     }
 
