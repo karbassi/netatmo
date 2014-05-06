@@ -256,11 +256,11 @@ netatmo.prototype.getMeasure = function(options, callback) {
       }
     }
 
-    if (options.optimize) {
+    if (options.optimize !== undefined) {
       form.optimize = !!options.optimize;
     }
 
-    if (options.real_time) {
+    if (options.real_time !== undefined) {
       form.real_time = !!options.real_time;
     }
   }
