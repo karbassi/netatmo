@@ -4,13 +4,13 @@ netatmo
 A node.js module to interface with the [netatmo api](http://dev.netatmo.com/) API.
 
 Getting Starting
----------------
+---
 
 1. Make sure you have a netatmo account.
 2. Make sure you have at least one netatmo device set up.
 
 Install
--------
+---
 
 ```sh
 npm install netatmo
@@ -20,7 +20,7 @@ Example #1
 ---
 
 ```javascript
-var netatmo = require('./netatmo');
+var netatmo = require('netatmo');
 
 var auth = {
   "client_id": "",
@@ -131,7 +131,7 @@ Example #2
 ---
 
 ```javascript
-var netatmo = require('./netatmo');
+var netatmo = require('netatmo');
 
 var auth = {
   "client_id": "",
@@ -255,4 +255,27 @@ var options = {
 };
 
 api.setThermpoint();
+```
+
+Catching Errors
+---
+
+```javascript
+var netatmo = require('netatmo');
+
+var auth = {
+  "client_id": "",
+  "client_secret": "",
+  "username": "",
+  "password": "",
+};
+
+var api = new netatmo(auth);
+
+api.on("error", function(error) {
+    // When the "error" event is emitted, this is called
+    console.error('Netatmo threw an error: ' + error);
+});
+
+// Rest of program
 ```

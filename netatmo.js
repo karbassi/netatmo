@@ -24,23 +24,23 @@ util.inherits(netatmo, EventEmitter);
 // http://dev.netatmo.com/doc/authentication
 netatmo.prototype.authenticate = function(args, callback) {
   if (!args) {
-    throw "netatmo Error: Authenticate 'args' not set.";
+    this.emit("error", new Error("Authenticate 'args' not set."));
   }
 
   if (!args.client_id) {
-    throw "netatmo Error: Authenticate 'client_id' not set.";
+    this.emit("error", new Error("Authenticate 'client_id' not set."));
   }
 
   if (!args.client_secret) {
-    throw "netatmo Error: Authenticate 'client_secret' not set.";
+    this.emit("error", new Error("Authenticate 'client_secret' not set."));
   }
 
   if (!args.username) {
-    throw "netatmo Error: Authenticate 'username' not set.";
+    this.emit("error", new Error("Authenticate 'username' not set."));
   }
 
   if (!args.password) {
-    throw "netatmo Error: Authenticate 'password' not set.";
+    this.emit("error", new Error("Authenticate 'password' not set."));
   }
 
   username = args.username;
@@ -66,7 +66,14 @@ netatmo.prototype.authenticate = function(args, callback) {
     form: form,
   }, function(err, response, body) {
     if (err || response.statusCode != 200) {
-      throw "netatmo Error: Authenticate error: " + response.statusCode;
+
+      if (body) {
+        var errorMsg = JSON.parse(body);
+        errorMsg = errorMsg && errorMsg.error;
+        this.emit("error", new Error("Authenticate error: " + errorMsg));
+      } else {
+        this.emit("error", new Error("Authenticate error: " + response.statusCode));
+      }
     }
 
     body = JSON.parse(body);
@@ -108,7 +115,7 @@ netatmo.prototype.getUser = function(callback) {
     form: form,
   }, function(err, response, body) {
     if (err || response.statusCode != 200) {
-      throw "netatmo Error: getUser error: " + response.statusCode;
+      this.emit("error", new Error("getUser error: " + response.statusCode));
     }
 
     body = JSON.parse(body);
@@ -157,7 +164,7 @@ netatmo.prototype.getDevicelist = function(options, callback) {
   }, function(err, response, body) {
     if (err || response.statusCode != 200) {
       console.log(body);
-      throw "netatmo Error: getDevicelist error: " + response.statusCode;
+      this.emit("error", new Error("getDevicelist error: " + response.statusCode));
     }
 
     body = JSON.parse(body);
@@ -188,19 +195,19 @@ netatmo.prototype.getMeasure = function(options, callback) {
   }
 
   if (!options) {
-    throw "netatmo Error: getMeasure 'options' not set.";
+    this.emit("error", new Error("getMeasure 'options' not set."));
   }
 
   if (!options.device_id) {
-    throw "netatmo Error: getMeasure 'device_id' not set.";
+    this.emit("error", new Error("getMeasure 'device_id' not set."));
   }
 
   if (!options.scale) {
-    throw "netatmo Error: getMeasure 'scale' not set.";
+    this.emit("error", new Error("getMeasure 'scale' not set."));
   }
 
   if (!options.type) {
-    throw "netatmo Error: getMeasure 'type' not set.";
+    this.emit("error", new Error("getMeasure 'type' not set."));
   }
 
   if (util.isArray(options.type)) {
@@ -265,7 +272,7 @@ netatmo.prototype.getMeasure = function(options, callback) {
   }, function(err, response, body) {
     if (err || response.statusCode != 200) {
       console.log(body);
-      throw "netatmo Error: getMeasure error: " + response.statusCode;
+      this.emit("error", new Error("getMeasure error: " + response.statusCode));
     }
 
     body = JSON.parse(body);
@@ -295,15 +302,15 @@ netatmo.prototype.getThermstate = function(options, callback) {
   }
 
   if (!options) {
-    throw "netatmo Error: getThermstate 'options' not set.";
+    this.emit("error", new Error("getThermstate 'options' not set."));
   }
 
   if (!options.device_id) {
-    throw "netatmo Error: getThermstate 'device_id' not set.";
+    this.emit("error", new Error("getThermstate 'device_id' not set."));
   }
 
   if (!options.module_id) {
-    throw "netatmo Error: getThermstate 'module_id' not set.";
+    this.emit("error", new Error("getThermstate 'module_id' not set."));
   }
 
   var url = util.format('%s/api/getthermstate', BASE_URL);
@@ -321,7 +328,7 @@ netatmo.prototype.getThermstate = function(options, callback) {
   }, function(err, response, body) {
     if (err || response.statusCode != 200) {
       console.log(body);
-      throw "netatmo Error: getThermstate error: " + response.statusCode;
+      this.emit("error", new Error("getThermstate error: " + response.statusCode));
     }
 
     body = JSON.parse(body);
@@ -349,23 +356,23 @@ netatmo.prototype.setSyncSchedule = function(options, callback) {
   }
 
   if (!options) {
-    throw "netatmo Error: setSyncSchedule 'options' not set.";
+    this.emit("error", new Error("setSyncSchedule 'options' not set."));
   }
 
   if (!options.device_id) {
-    throw "netatmo Error: setSyncSchedule 'device_id' not set.";
+    this.emit("error", new Error("setSyncSchedule 'device_id' not set."));
   }
 
   if (!options.module_id) {
-    throw "netatmo Error: setSyncSchedule 'module_id' not set.";
+    this.emit("error", new Error("setSyncSchedule 'module_id' not set."));
   }
 
   if (!options.zones) {
-    throw "netatmo Error: setSyncSchedule 'zones' not set.";
+    this.emit("error", new Error("setSyncSchedule 'zones' not set."));
   }
 
   if (!options.timetable) {
-    throw "netatmo Error: setSyncSchedule 'timetable' not set.";
+    this.emit("error", new Error("setSyncSchedule 'timetable' not set."));
   }
 
   var url = util.format('%s/api/syncschedule', BASE_URL);
@@ -385,7 +392,7 @@ netatmo.prototype.setSyncSchedule = function(options, callback) {
   }, function(err, response, body) {
     if (err || response.statusCode != 200) {
       console.log(body);
-      throw "netatmo Error: setSyncSchedule error: " + response.statusCode;
+      this.emit("error", new Error("setSyncSchedule error: " + response.statusCode));
     }
 
     body = JSON.parse(body);
@@ -413,19 +420,19 @@ netatmo.prototype.setThermpoint = function(options, callback) {
   }
 
   if (!options) {
-    throw "netatmo Error: setThermpoint 'options' not set.";
+    this.emit("error", new Error("setThermpoint 'options' not set."));
   }
 
   if (!options.device_id) {
-    throw "netatmo Error: setThermpoint 'device_id' not set.";
+    this.emit("error", new Error("setThermpoint 'device_id' not set."));
   }
 
   if (!options.module_id) {
-    throw "netatmo Error: setThermpoint 'module_id' not set.";
+    this.emit("error", new Error("setThermpoint 'module_id' not set."));
   }
 
   if (!options.setpoint_mode) {
-    throw "netatmo Error: setThermpoint 'setpoint_mode' not set.";
+    this.emit("error", new Error("setThermpoint 'setpoint_mode' not set."));
   }
 
   var url = util.format('%s/api/setthermpoint', BASE_URL);
@@ -456,7 +463,7 @@ netatmo.prototype.setThermpoint = function(options, callback) {
   }, function(err, response, body) {
     if (err || response.statusCode != 200) {
       console.log(body);
-      throw "netatmo Error: setThermpoint error: " + response.statusCode;
+      this.emit("error", new Error("setThermpoint error: " + response.statusCode));
     }
 
     body = JSON.parse(body);
