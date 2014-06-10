@@ -241,7 +241,9 @@ netatmo.prototype.getMeasure = function(options, callback) {
       form.date_begin = moment(options.date_begin).utc().unix();
     }
 
-    if (options.date_end) {
+    if (options.date_end === 'last') {
+      form.date_end = 'last';
+    } else if (options.date_end) {
       if (options.date_end <= 1E10) {
         options.date_end *= 1E3;
       }
