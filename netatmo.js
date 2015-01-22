@@ -11,8 +11,6 @@ var client_id;
 var client_secret;
 var scope;
 var access_token;
-var refresh_token;
-var expires_in;
 
 var netatmo = function(args) {
   EventEmitter.call(this);
@@ -79,14 +77,54 @@ netatmo.prototype.authenticate = function(args, callback) {
     body = JSON.parse(body);
 
     access_token = body.access_token;
-    refresh_token = body.refresh_token;
-    expires_in = body.expires_in;
+
+    setTimeout(this.authenticate_refresh.bind(this), body.expires_in * 1000, body.refresh_token);
 
     this.emit('authenticated');
 
     if (callback) {
       return callback();
     }
+
+    return this;
+  }.bind(this));
+
+  return this;
+};
+
+// http://dev.netatmo.com/doc/authentication
+netatmo.prototype.authenticate_refresh = function(refresh_token) {
+
+  var form = {
+    grant_type: 'refresh_token',
+    refresh_token: refresh_token,
+    client_id: client_id,
+    client_secret: client_secret,
+  };
+
+  var url = util.format('%s/oauth2/token', BASE_URL);
+
+  request({
+    url: url,
+    method: "POST",
+    form: form,
+  }, function(err, response, body) {
+    if (err || response.statusCode != 200) {
+
+      if (body) {
+        var errorMsg = JSON.parse(body);
+        errorMsg = errorMsg && errorMsg.error;
+        this.emit("error", new Error("Authenticate refresh error: " + errorMsg));
+      } else {
+        this.emit("error", new Error("Authenticate refresh error: " + response.statusCode));
+      }
+    }
+
+    body = JSON.parse(body);
+
+    access_token = body.access_token;
+
+    setTimeout(this.authenticate_refresh.bind(this), body.expires_in * 1000, body.refresh_token);
 
     return this;
   }.bind(this));
