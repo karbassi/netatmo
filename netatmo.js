@@ -78,7 +78,9 @@ netatmo.prototype.authenticate = function(args, callback) {
 
     access_token = body.access_token;
 
-    setTimeout(this.authenticate_refresh.bind(this), body.expires_in * 1000, body.refresh_token);
+    if (body.expires_in) {
+        setTimeout(this.authenticate_refresh.bind(this), body.expires_in * 1000, body.refresh_token);
+    }
 
     this.emit('authenticated');
 
@@ -124,7 +126,9 @@ netatmo.prototype.authenticate_refresh = function(refresh_token) {
 
     access_token = body.access_token;
 
-    setTimeout(this.authenticate_refresh.bind(this), body.expires_in * 1000, body.refresh_token);
+    if (body.expires_in) {
+        setTimeout(this.authenticate_refresh.bind(this), body.expires_in * 1000, body.refresh_token);
+    }
 
     return this;
   }.bind(this));
