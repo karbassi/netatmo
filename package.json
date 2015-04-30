@@ -1,5 +1,5 @@
 {
-  "name": "netatmo",
+  "name": "netatmo-lordpengwin",
   "version": "1.1.1",
   "description": "A node.js module to hook into the netatmo API.",
   "main": "netatmo.js",
