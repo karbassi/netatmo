@@ -257,7 +257,7 @@ var options = {
 api.setThermpoint();
 ```
 
-Catching Errors
+Catching Errors and Warnings
 ---
 
 ```javascript
@@ -275,6 +275,11 @@ var api = new netatmo(auth);
 api.on("error", function(error) {
     // When the "error" event is emitted, this is called
     console.error('Netatmo threw an error: ' + error);
+});
+
+api.on("warning", function(error) {
+    // When the "warning" event is emitted, this is called
+    console.log('Netatmo threw a warning: ' + error);
 });
 
 // Rest of program
