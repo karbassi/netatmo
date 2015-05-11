@@ -19,7 +19,7 @@ var netatmo = function(args) {
 
 util.inherits(netatmo, EventEmitter);
 
-netatmo.prototype.handleRequestError = function(err,response,body,message,emit) {
+netatmo.prototype.handleRequestError = function(err,response,body,message,critical) {
   var errorMessage = "";
   if (body) {
     errorMessage = JSON.parse(body);
@@ -31,10 +31,10 @@ netatmo.prototype.handleRequestError = function(err,response,body,message,emit) 
     errorMessage = "No response";
   }
   var error = new Error(message + ": " + errorMessage);
-  if(emit) {
+  if(critical) {
     this.emit("error", error);
   } else {
-    console.log(error);
+    this.emit("warning", error);
   }
   return error;
 };
@@ -97,7 +97,7 @@ netatmo.prototype.authenticate = function(args, callback) {
     access_token = body.access_token;
 
     if (body.expires_in) {
-        setTimeout(this.authenticate_refresh.bind(this), body.expires_in * 1000, body.refresh_token);
+      setTimeout(this.authenticate_refresh.bind(this), body.expires_in * 1000, body.refresh_token);
     }
 
     this.emit('authenticated');
