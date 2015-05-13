@@ -330,7 +330,9 @@ netatmo.prototype.getMeasure = function(options, callback) {
   }, function(err, response, body) {
     if (err || response.statusCode != 200) {
       var error = this.handleRequestError(err,response,body,"getMeasure error");
-      if (callback) callback(error);
+      if (callback) {
+        callback(error);
+      }
       return;
     }
 
