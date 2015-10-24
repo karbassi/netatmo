@@ -242,7 +242,7 @@ netatmo.prototype.getStationsData = function(options, callback) {
   // Wait until authenticated.
   if (!access_token) {
     return this.on('authenticated', function() {
-      this.getDevicelist(options, callback);
+      this.getStationsData(options, callback);
     });
   }
 
