@@ -237,6 +237,56 @@ netatmo.prototype.getDevicelist = function(options, callback) {
   return this;
 };
 
+// https://dev.netatmo.com/doc/methods/getstationsdata
+netatmo.prototype.getStationsData = function(options, callback) {
+  // Wait until authenticated.
+  if (!access_token) {
+    return this.on('authenticated', function() {
+      this.getDevicelist(options, callback);
+    });
+  }
+
+  if (options != null && callback == null) {
+    callback = options;
+    options = null;
+  }
+
+  var url = util.format('%s/api/getstationsdata', BASE_URL);
+
+  var form = {
+    access_token: access_token,
+  };
+
+  if (options && options.app_type) {
+    form.app_type = options.app_type;
+  }
+
+  request({
+    url: url,
+    method: "POST",
+    form: form,
+  }, function(err, response, body) {
+    if (err || response.statusCode != 200) {
+      return this.handleRequestError(err,response,body,"getStationsDataError error");
+    }
+
+    body = JSON.parse(body);
+
+    var devices = body.body.devices;
+
+    this.emit('get-stationsdata', err, devices);
+
+    if (callback) {
+      return callback(err, devices, modules);
+    }
+
+    return this;
+
+  }.bind(this));
+
+  return this;
+};
+
 // https://dev.netatmo.com/doc/methods/getmeasure
 netatmo.prototype.getMeasure = function(options, callback) {
   // Wait until authenticated.

@@ -24,6 +24,12 @@ api.getDevicelist(function(err, devices, modules) {
   console.log(modules);
 });
 
+// Get Stations Data
+// See docs: https://dev.netatmo.com/doc/methods/getstationsdata
+api.getStationsData(function(err, devices) {
+  console.log(devices);
+});
+
 // Get Measure
 // See docs: http://dev.netatmo.com/doc/restapi/getmeasure
 var options = {
@@ -118,6 +124,11 @@ var getDevicelist = function(err, devices, modules) {
   console.log(modules);
 };
 
+var getStationsData = function(err, devices) {
+  console.log(devices);
+  console.log(modules);
+};
+
 var getMeasure = function(err, measure) {
   console.log(measure.length);
   console.log(measure[0]);
@@ -138,6 +149,7 @@ var setThermpoint = function(err, status) {
 // Event Listeners
 api.on('get-user', getUser);
 api.on('get-devicelist', getDevicelist);
+api.on('get-stationsdata', getStationsData);
 api.on('get-measure', getMeasure);
 api.on('get-thermstate', getThermstate);
 api.on('set-syncschedule', setSyncSchedule);
@@ -150,6 +162,10 @@ api.getUser();
 // Get Devicelist
 // See docs: http://dev.netatmo.com/doc/restapi/devicelist
 api.getDevicelist();
+
+// Get Stations Data
+// See docs: https://dev.netatmo.com/doc/methods/getstationsdata
+api.getStationsData();
 
 // Get Measure
 // See docs: http://dev.netatmo.com/doc/restapi/getmeasure
