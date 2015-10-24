@@ -277,7 +277,7 @@ netatmo.prototype.getStationsData = function(options, callback) {
     this.emit('get-stationsdata', err, devices);
 
     if (callback) {
-      return callback(err, devices, modules);
+      return callback(err, devices);
     }
 
     return this;
