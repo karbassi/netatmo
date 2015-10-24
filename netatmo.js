@@ -147,7 +147,7 @@ netatmo.prototype.authenticate_refresh = function(refresh_token) {
   return this;
 };
 
-// http://dev.netatmo.com/doc/restapi/getuser
+// https://dev.netatmo.com/doc/methods/getuser
 netatmo.prototype.getUser = function(callback) {
   // Wait until authenticated.
   if (!access_token) {
@@ -186,7 +186,7 @@ netatmo.prototype.getUser = function(callback) {
   return this;
 };
 
-// http://dev.netatmo.com/doc/restapi/devicelist
+// https://dev.netatmo.com/doc/methods/devicelist
 netatmo.prototype.getDevicelist = function(options, callback) {
   // Wait until authenticated.
   if (!access_token) {
@@ -237,7 +237,7 @@ netatmo.prototype.getDevicelist = function(options, callback) {
   return this;
 };
 
-// http://dev.netatmo.com/doc/restapi/getmeasure
+// https://dev.netatmo.com/doc/methods/getmeasure
 netatmo.prototype.getMeasure = function(options, callback) {
   // Wait until authenticated.
   if (!access_token) {
@@ -353,7 +353,7 @@ netatmo.prototype.getMeasure = function(options, callback) {
   return this;
 };
 
-// http://dev.netatmo.com/doc/restapi/getthermstate
+// https://dev.netatmo.com/doc/methods/getthermstate
 netatmo.prototype.getThermstate = function(options, callback) {
   // Wait until authenticated.
   if (!access_token) {
@@ -409,7 +409,7 @@ netatmo.prototype.getThermstate = function(options, callback) {
   return this;
 };
 
-// http://dev.netatmo.com/doc/restapi/syncschedule
+// https://dev.netatmo.com/doc/methods/syncschedule
 netatmo.prototype.setSyncSchedule = function(options, callback) {
   // Wait until authenticated.
   if (!access_token) {
@@ -477,7 +477,7 @@ netatmo.prototype.setSyncSchedule = function(options, callback) {
   return this;
 };
 
-// http://dev.netatmo.com/doc/restapi/setthermpoint
+// https://dev.netatmo.com/doc/methods/setthermpoint
 netatmo.prototype.setThermpoint = function(options, callback) {
   // Wait until authenticated.
   if (!access_token) {
