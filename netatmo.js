@@ -22,8 +22,7 @@ util.inherits(netatmo, EventEmitter);
 netatmo.prototype.handleRequestError = function(err,response,body,message,critical) {
   var errorMessage = "";
   if (body) {
-    errorMessage = JSON.parse(body);
-    errorMessage = errorMessage && errorMessage.error;
+    errorMessage = body;
   } else if (typeof response !== 'undefined') {
     errorMessage = "Status code" + response.statusCode;
   }
