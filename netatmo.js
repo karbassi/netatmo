@@ -700,7 +700,7 @@ netatmo.prototype.setThermpoint = function (options, callback) {
 
     console.log(body);
 
-    this.emit('set-thermpoint', err, body.status);
+    this.emit('get-thermstate', err, body.status);
 
     if (callback) {
       return callback(err, body.status);
