@@ -23,7 +23,7 @@ netatmo.prototype.handleRequestError = function(err,response,body,message,critic
   var errorMessage = "";
   if (body) {
     errorMessage = JSON.parse(body);
-    errorMessage = errorMessage && errorMessage.error;
+    errorMessage = errorMessage && (errorMessage.error.message || errorMessage.error);
   } else if (typeof response !== 'undefined') {
     errorMessage = "Status code" + response.statusCode;
   }
