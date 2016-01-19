@@ -363,7 +363,7 @@ netatmo.prototype.getThermostatsData = function (options, callback) {
 
     var devices = body.body.devices;
 
-    this.emit('get-stationsdata', err, devices);
+    this.emit('get-thermostatsdata', err, devices);
 
     if (callback) {
       return callback(err, devices);
@@ -700,7 +700,7 @@ netatmo.prototype.setThermpoint = function (options, callback) {
 
     console.log(body);
 
-    this.emit('get-thermstate', err, body.status);
+    this.emit('get-thermostatsdata', err, body.status);
 
     if (callback) {
       return callback(err, body.status);
