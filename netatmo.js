@@ -12,14 +12,27 @@ var client_secret;
 var scope;
 var access_token;
 
-var netatmo = function(args) {
+/**
+ * @constructor
+ * @param args
+ */
+var netatmo = function (args) {
   EventEmitter.call(this);
   this.authenticate(args);
 };
 
 util.inherits(netatmo, EventEmitter);
 
-netatmo.prototype.handleRequestError = function(err,response,body,message,critical) {
+/**
+ * handleRequestError
+ * @param err
+ * @param response
+ * @param body
+ * @param message
+ * @param critical
+ * @returns {Error}
+ */
+netatmo.prototype.handleRequestError = function (err, response, body, message, critical) {
   var errorMessage = "";
   if (body) {
     errorMessage = JSON.parse(body);
@@ -31,7 +44,7 @@ netatmo.prototype.handleRequestError = function(err,response,body,message,critic
     errorMessage = "No response";
   }
   var error = new Error(message + ": " + errorMessage);
-  if(critical) {
+  if (critical) {
     this.emit("error", error);
   } else {
     this.emit("warning", error);
@@ -39,8 +52,13 @@ netatmo.prototype.handleRequestError = function(err,response,body,message,critic
   return error;
 };
 
-// http://dev.netatmo.com/doc/authentication
-netatmo.prototype.authenticate = function(args, callback) {
+/**
+ * http://dev.netatmo.com/doc/authentication
+ * @param args
+ * @param callback
+ * @returns {netatmo}
+ */
+netatmo.prototype.authenticate = function (args, callback) {
   if (!args) {
     this.emit("error", new Error("Authenticate 'args' not set."));
     return this;
@@ -87,9 +105,9 @@ netatmo.prototype.authenticate = function(args, callback) {
     url: url,
     method: "POST",
     form: form,
-  }, function(err, response, body) {
+  }, function (err, response, body) {
     if (err || response.statusCode != 200) {
-      return this.handleRequestError(err,response,body,"Authenticate error", true);
+      return this.handleRequestError(err, response, body, "Authenticate error", true);
     }
 
     body = JSON.parse(body);
@@ -112,8 +130,12 @@ netatmo.prototype.authenticate = function(args, callback) {
   return this;
 };
 
-// http://dev.netatmo.com/doc/authentication
-netatmo.prototype.authenticate_refresh = function(refresh_token) {
+/**
+ * http://dev.netatmo.com/doc/authentication
+ * @param refresh_token
+ * @returns {netatmo}
+ */
+netatmo.prototype.authenticate_refresh = function (refresh_token) {
 
   var form = {
     grant_type: 'refresh_token',
@@ -128,9 +150,9 @@ netatmo.prototype.authenticate_refresh = function(refresh_token) {
     url: url,
     method: "POST",
     form: form,
-  }, function(err, response, body) {
+  }, function (err, response, body) {
     if (err || response.statusCode != 200) {
-      return this.handleRequestError(err,response,body,"Authenticate refresh error");
+      return this.handleRequestError(err, response, body, "Authenticate refresh error");
     }
 
     body = JSON.parse(body);
@@ -138,7 +160,7 @@ netatmo.prototype.authenticate_refresh = function(refresh_token) {
     access_token = body.access_token;
 
     if (body.expires_in) {
-        setTimeout(this.authenticate_refresh.bind(this), body.expires_in * 1000, body.refresh_token);
+      setTimeout(this.authenticate_refresh.bind(this), body.expires_in * 1000, body.refresh_token);
     }
 
     return this;
@@ -147,11 +169,17 @@ netatmo.prototype.authenticate_refresh = function(refresh_token) {
   return this;
 };
 
-// https://dev.netatmo.com/doc/methods/getuser
-netatmo.prototype.getUser = function(callback) {
+
+/**
+ * https://dev.netatmo.com/doc/methods/getuser
+ * @param callback
+ * @returns {*}
+ * @deprecated
+ */
+netatmo.prototype.getUser = function (callback) {
   // Wait until authenticated.
   if (!access_token) {
-    return this.on('authenticated', function() {
+    return this.on('authenticated', function () {
       this.getUser(callback);
     });
   }
@@ -166,9 +194,9 @@ netatmo.prototype.getUser = function(callback) {
     url: url,
     method: "POST",
     form: form,
-  }, function(err, response, body) {
+  }, function (err, response, body) {
     if (err || response.statusCode != 200) {
-      return this.handleRequestError(err,response,body,"getUser error");
+      return this.handleRequestError(err, response, body, "getUser error");
     }
 
     body = JSON.parse(body);
@@ -186,11 +214,18 @@ netatmo.prototype.getUser = function(callback) {
   return this;
 };
 
-// https://dev.netatmo.com/doc/methods/devicelist
-netatmo.prototype.getDevicelist = function(options, callback) {
+
+/**
+ * https://dev.netatmo.com/doc/methods/devicelist
+ * @param options
+ * @param callback
+ * @returns {*}
+ * @deprecated
+ */
+netatmo.prototype.getDevicelist = function (options, callback) {
   // Wait until authenticated.
   if (!access_token) {
-    return this.on('authenticated', function() {
+    return this.on('authenticated', function () {
       this.getDevicelist(options, callback);
     });
   }
@@ -214,9 +249,9 @@ netatmo.prototype.getDevicelist = function(options, callback) {
     url: url,
     method: "POST",
     form: form,
-  }, function(err, response, body) {
+  }, function (err, response, body) {
     if (err || response.statusCode != 200) {
-      return this.handleRequestError(err,response,body,"getDevicelist error");
+      return this.handleRequestError(err, response, body, "getDevicelist error");
     }
 
     body = JSON.parse(body);
@@ -237,11 +272,16 @@ netatmo.prototype.getDevicelist = function(options, callback) {
   return this;
 };
 
-// https://dev.netatmo.com/doc/methods/getstationsdata
-netatmo.prototype.getStationsData = function(options, callback) {
+/**
+ * https://dev.netatmo.com/doc/methods/getstationsdata
+ * @param options
+ * @param callback
+ * @returns {*}
+ */
+netatmo.prototype.getStationsData = function (options, callback) {
   // Wait until authenticated.
   if (!access_token) {
-    return this.on('authenticated', function() {
+    return this.on('authenticated', function () {
       this.getStationsData(options, callback);
     });
   }
@@ -265,9 +305,9 @@ netatmo.prototype.getStationsData = function(options, callback) {
     url: url,
     method: "POST",
     form: form,
-  }, function(err, response, body) {
+  }, function (err, response, body) {
     if (err || response.statusCode != 200) {
-      return this.handleRequestError(err,response,body,"getStationsDataError error");
+      return this.handleRequestError(err, response, body, "getStationsDataError error");
     }
 
     body = JSON.parse(body);
@@ -287,11 +327,65 @@ netatmo.prototype.getStationsData = function(options, callback) {
   return this;
 };
 
-// https://dev.netatmo.com/doc/methods/getmeasure
-netatmo.prototype.getMeasure = function(options, callback) {
+/**
+ * https://dev.netatmo.com/doc/methods/getthermostatsdata
+ * @param options
+ * @param callback
+ * @returns {*}
+ */
+netatmo.prototype.getThermostatsData = function (options, callback) {
   // Wait until authenticated.
   if (!access_token) {
-    return this.on('authenticated', function() {
+    return this.on('authenticated', function () {
+      this.getThermostatsData(options, callback);
+    });
+  }
+
+  if (options != null && callback == null) {
+    callback = options;
+    options = null;
+  }
+
+  var url = util.format('%s/api/getthermostatsdata?access_token=%s', BASE_URL, access_token);
+  if (options != null) {
+    url = util.format(url + '&device_id=%s', options.device_id);
+  }
+
+  request({
+    url: url,
+    method: "GET",
+  }, function (err, response, body) {
+    if (err || response.statusCode != 200) {
+      return this.handleRequestError(err, response, body, "getThermostatsDataError error");
+    }
+
+    body = JSON.parse(body);
+
+    var devices = body.body.devices;
+
+    this.emit('get-thermostatsdata', err, devices);
+
+    if (callback) {
+      return callback(err, devices);
+    }
+
+    return this;
+
+  }.bind(this));
+
+  return this;
+};
+
+/**
+ * https://dev.netatmo.com/doc/methods/getmeasure
+ * @param options
+ * @param callback
+ * @returns {*}
+ */
+netatmo.prototype.getMeasure = function (options, callback) {
+  // Wait until authenticated.
+  if (!access_token) {
+    return this.on('authenticated', function () {
       this.getMeasure(options, callback);
     });
   }
@@ -377,9 +471,9 @@ netatmo.prototype.getMeasure = function(options, callback) {
     url: url,
     method: "POST",
     form: form,
-  }, function(err, response, body) {
+  }, function (err, response, body) {
     if (err || response.statusCode != 200) {
-      var error = this.handleRequestError(err,response,body,"getMeasure error");
+      var error = this.handleRequestError(err, response, body, "getMeasure error");
       if (callback) {
         callback(error);
       }
@@ -403,11 +497,17 @@ netatmo.prototype.getMeasure = function(options, callback) {
   return this;
 };
 
-// https://dev.netatmo.com/doc/methods/getthermstate
-netatmo.prototype.getThermstate = function(options, callback) {
+/**
+ * https://dev.netatmo.com/doc/methods/getthermstate
+ * @param options
+ * @param callback
+ * @returns {*}
+ * @deprecated
+ */
+netatmo.prototype.getThermstate = function (options, callback) {
   // Wait until authenticated.
   if (!access_token) {
-    return this.on('authenticated', function() {
+    return this.on('authenticated', function () {
       this.getThermstate(options, callback);
     });
   }
@@ -439,9 +539,9 @@ netatmo.prototype.getThermstate = function(options, callback) {
     url: url,
     method: "POST",
     form: form,
-  }, function(err, response, body) {
+  }, function (err, response, body) {
     if (err || response.statusCode != 200) {
-      return this.handleRequestError(err,response,body,"getThermstate error");
+      return this.handleRequestError(err, response, body, "getThermstate error");
     }
 
     body = JSON.parse(body);
@@ -459,11 +559,16 @@ netatmo.prototype.getThermstate = function(options, callback) {
   return this;
 };
 
-// https://dev.netatmo.com/doc/methods/syncschedule
-netatmo.prototype.setSyncSchedule = function(options, callback) {
+/**
+ * https://dev.netatmo.com/doc/methods/syncschedule
+ * @param options
+ * @param callback
+ * @returns {*}
+ */
+netatmo.prototype.setSyncSchedule = function (options, callback) {
   // Wait until authenticated.
   if (!access_token) {
-    return this.on('authenticated', function() {
+    return this.on('authenticated', function () {
       this.setSyncSchedule(options, callback);
     });
   }
@@ -507,9 +612,9 @@ netatmo.prototype.setSyncSchedule = function(options, callback) {
     url: url,
     method: "POST",
     form: form,
-  }, function(err, response, body) {
+  }, function (err, response, body) {
     if (err || response.statusCode != 200) {
-      return this.handleRequestError(err,response,body,"setSyncSchedule error");
+      return this.handleRequestError(err, response, body, "setSyncSchedule error");
     }
 
     body = JSON.parse(body);
@@ -527,11 +632,16 @@ netatmo.prototype.setSyncSchedule = function(options, callback) {
   return this;
 };
 
-// https://dev.netatmo.com/doc/methods/setthermpoint
-netatmo.prototype.setThermpoint = function(options, callback) {
+/**
+ * https://dev.netatmo.com/doc/methods/setthermpoint
+ * @param options
+ * @param callback
+ * @returns {*}
+ */
+netatmo.prototype.setThermpoint = function (options, callback) {
   // Wait until authenticated.
   if (!access_token) {
-    return this.on('authenticated', function() {
+    return this.on('authenticated', function () {
       this.setThermpoint(options, callback);
     });
   }
@@ -581,16 +691,16 @@ netatmo.prototype.setThermpoint = function(options, callback) {
     url: url,
     method: "POST",
     form: form,
-  }, function(err, response, body) {
+  }, function (err, response, body) {
     if (err || response.statusCode != 200) {
-      return this.handleRequestError(err,response,body,"setThermpoint error");
+      return this.handleRequestError(err, response, body, "setThermpoint error");
     }
 
     body = JSON.parse(body);
 
     console.log(body);
 
-    this.emit('get-thermstate', err, body.status);
+    this.emit('get-thermostatsdata', err, body.status);
 
     if (callback) {
       return callback(err, body.status);
