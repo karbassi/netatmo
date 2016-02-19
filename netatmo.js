@@ -698,8 +698,6 @@ netatmo.prototype.setThermpoint = function (options, callback) {
 
     body = JSON.parse(body);
 
-    console.log(body);
-
     this.emit('get-thermostatsdata', err, body.status);
 
     if (callback) {
