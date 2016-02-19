@@ -64,6 +64,11 @@ netatmo.prototype.authenticate = function (args, callback) {
     return this;
   }
 
+  if (args.access_token) {
+    access_token = args.access_token;
+    return this;
+  }
+
   if (!args.client_id) {
     this.emit("error", new Error("Authenticate 'client_id' not set."));
     return this;
