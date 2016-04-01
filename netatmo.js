@@ -994,7 +994,7 @@ netatmo.prototype.getCameraPicture = function (options, callback) {
 
   var url = util.format('%s/api/getcamerapicture', BASE_URL);
 
-  var form = {
+  var qs = {
     access_token: access_token,
     image_id: options.image_id,
     key: options.key,
@@ -1002,19 +1002,19 @@ netatmo.prototype.getCameraPicture = function (options, callback) {
 
   request({
     url: url,
-    method: "POST",
-    form: form,
+    method: "GET",
+    qs: qs,
+    encoding: null,
+    contentType: 'image/jpg'
   }, function (err, response, body) {
     if (err || response.statusCode != 200) {
       return this.handleRequestError(err, response, body, "getCameraPicture error");
     }
 
-    body = JSON.parse(body);
-
-    this.emit('get-camerapicture', err, body.body);
+    this.emit('get-camerapicture', err, body);
 
     if (callback) {
-      return callback(err, body.body);
+      return callback(err, body);
     }
 
     return this;
