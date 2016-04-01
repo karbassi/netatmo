@@ -731,6 +731,11 @@ netatmo.prototype.getHomeData = function (options, callback) {
     access_token: access_token
   };
 
+  if (options != null && callback == null) {
+    callback = options;
+    options = null;
+  }
+
   if (options) {
 
     if (options.home_id) {
