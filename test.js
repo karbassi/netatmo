@@ -239,4 +239,40 @@ var options = {
 
 api.setThermpoint();
 
+api.getHomeData();
 
+// Get Next Events
+// See docs: https://dev.netatmo.com/doc/methods/getnextevents
+var options = {
+  home_id: '',
+  event_id: ''
+};
+
+api.getNextEvents();
+
+// Get Next Events
+// See docs: https://dev.netatmo.com/doc/methods/getlasteventof
+var options = {
+  home_id: '',
+  person_id: ''
+};
+
+api.getLastEventOf();
+
+// Get Next Events
+// See docs: https://dev.netatmo.com/doc/methods/geteventsuntil
+var options = {
+  home_id: '',
+  event_id: ''
+};
+
+api.getEventsUntil();
+
+// Get Next Events
+// See docs: https://dev.netatmo.com/doc/methods/getcamerapicture
+var options = {
+  image_id: '',
+  key: ''
+};
+
+api.getCameraPicture(options);
