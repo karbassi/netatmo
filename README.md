@@ -125,6 +125,25 @@ var options = {
 api.setThermpoint(options, function(err, status) {
   console.log(status);
 });
+
+
+// Get Home Data
+// See docs: https://dev.netatmo.com/doc/methods/gethomedata
+api.getHomeData(function(err, data) {
+  console.log(data);
+});
+
+
+// Get Next Events
+// See docs: https://dev.netatmo.com/doc/methods/getnextevents
+var options = {
+  home_id: '',
+  event_id: ''
+};
+
+api.getNextEvents(options, function(err,events) {
+  console.log(events);
+});
 ```
 
 Example #2
@@ -160,6 +179,10 @@ var getThermstate = function(err, result) {
   console.log(result);
 };
 
+var getCameraPicture = function(err, picture) {
+  console.log(picture); // image/jpeg
+}
+
 var setSyncSchedule = function(err, status) {
   console.log(status);
 };
@@ -173,6 +196,7 @@ api.on('get-user', getUser);
 api.on('get-devicelist', getDevicelist);
 api.on('get-measure', getMeasure);
 api.on('get-thermstate', getThermstate);
+api.on('get-camerapicture', getCameraPicture);
 api.on('set-syncschedule', setSyncSchedule);
 api.on('set-thermpoint', setThermpoint);
 

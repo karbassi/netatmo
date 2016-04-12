@@ -93,7 +93,7 @@ netatmo.prototype.authenticate = function (args, callback) {
   password = args.password;
   client_id = args.client_id;
   client_secret = args.client_secret;
-  scope = args.scope || 'read_station read_thermostat write_thermostat';
+  scope = args.scope || 'read_station read_thermostat write_thermostat read_camera';
 
   var form = {
     client_id: client_id,
@@ -707,6 +707,319 @@ netatmo.prototype.setThermpoint = function (options, callback) {
 
     if (callback) {
       return callback(err, body.status);
+    }
+
+    return this;
+
+  }.bind(this));
+
+  return this;
+};
+
+/**
+ * https://dev.netatmo.com/doc/methods/gethomedata
+ * @param options
+ * @param callback
+ * @returns {*}
+ */
+netatmo.prototype.getHomeData = function (options, callback) {
+  // Wait until authenticated.
+  if (!access_token) {
+    return this.on('authenticated', function () {
+      this.getHomeData(options, callback);
+    });
+  }
+
+  var url = util.format('%s/api/gethomedata', BASE_URL);
+
+  var form = {
+    access_token: access_token
+  };
+
+  if (options != null && callback == null) {
+    callback = options;
+    options = null;
+  }
+
+  if (options) {
+
+    if (options.home_id) {
+      form.home_id = options.home_id;
+    }
+
+    if (options.size) {
+      form.size = options.size;
+    }
+
+  }
+
+  request({
+    url: url,
+    method: "POST",
+    form: form,
+  }, function (err, response, body) {
+    if (err || response.statusCode != 200) {
+      return this.handleRequestError(err, response, body, "getHomeData error");
+    }
+
+    body = JSON.parse(body);
+
+    this.emit('get-homedata', err, body.body);
+
+    if (callback) {
+      return callback(err, body.body);
+    }
+
+    return this;
+
+  }.bind(this));
+
+  return this;
+};
+
+/**
+ * https://dev.netatmo.com/doc/methods/getnextevents
+ * @param options
+ * @param callback
+ * @returns {*}
+ */
+netatmo.prototype.getNextEvents = function (options, callback) {
+  // Wait until authenticated.
+  if (!access_token) {
+    return this.on('authenticated', function () {
+      this.getNextEvents(options, callback);
+    });
+  }
+
+  if (!options) {
+    this.emit("error", new Error("getNextEvents 'options' not set."));
+    return this;
+  }
+
+  if (!options.home_id) {
+    this.emit("error", new Error("getNextEvents 'home_id' not set."));
+    return this;
+  }
+
+  if (!options.event_id) {
+    this.emit("error", new Error("getNextEvents 'event_id' not set."));
+    return this;
+  }
+
+  var url = util.format('%s/api/getnextevents', BASE_URL);
+
+  var form = {
+    access_token: access_token,
+    home_id: options.home_id,
+    event_id: options.event_id,
+  };
+
+  if (options.size) {
+    form.size = options.size;
+  }
+
+  request({
+    url: url,
+    method: "POST",
+    form: form,
+  }, function (err, response, body) {
+    if (err || response.statusCode != 200) {
+      return this.handleRequestError(err, response, body, "getNextEvents error");
+    }
+
+    body = JSON.parse(body);
+
+    this.emit('get-nextevents', err, body.body);
+
+    if (callback) {
+      return callback(err, body.body);
+    }
+
+    return this;
+
+  }.bind(this));
+
+  return this;
+};
+
+/**
+ * https://dev.netatmo.com/doc/methods/getlasteventof
+ * @param options
+ * @param callback
+ * @returns {*}
+ */
+netatmo.prototype.getLastEventOf = function (options, callback) {
+  // Wait until authenticated.
+  if (!access_token) {
+    return this.on('authenticated', function () {
+      this.getLastEventOf(options, callback);
+    });
+  }
+
+  if (!options) {
+    this.emit("error", new Error("getLastEventOf 'options' not set."));
+    return this;
+  }
+
+  if (!options.home_id) {
+    this.emit("error", new Error("getLastEventOf 'home_id' not set."));
+    return this;
+  }
+
+  if (!options.person_id) {
+    this.emit("error", new Error("getLastEventOf 'person_id' not set."));
+    return this;
+  }
+
+  var url = util.format('%s/api/getlasteventof', BASE_URL);
+
+  var form = {
+    access_token: access_token,
+    home_id: options.home_id,
+    person_id: options.person_id,
+  };
+
+  if (options.offset) {
+    form.offset = options.offset;
+  }
+
+  request({
+    url: url,
+    method: "POST",
+    form: form,
+  }, function (err, response, body) {
+    if (err || response.statusCode != 200) {
+      return this.handleRequestError(err, response, body, "getLastEventOf error");
+    }
+
+    body = JSON.parse(body);
+
+    this.emit('get-lasteventof', err, body.body);
+
+    if (callback) {
+      return callback(err, body.body);
+    }
+
+    return this;
+
+  }.bind(this));
+
+  return this;
+};
+
+/**
+ * https://dev.netatmo.com/doc/methods/geteventsuntil
+ * @param options
+ * @param callback
+ * @returns {*}
+ */
+netatmo.prototype.getEventsUntil = function (options, callback) {
+  // Wait until authenticated.
+  if (!access_token) {
+    return this.on('authenticated', function () {
+      this.getEventsUntil(options, callback);
+    });
+  }
+
+  if (!options) {
+    this.emit("error", new Error("getEventsUntil 'options' not set."));
+    return this;
+  }
+
+  if (!options.home_id) {
+    this.emit("error", new Error("getEventsUntil 'home_id' not set."));
+    return this;
+  }
+
+  if (!options.event_id) {
+    this.emit("error", new Error("getEventsUntil 'event_id' not set."));
+    return this;
+  }
+
+  var url = util.format('%s/api/geteventsuntil', BASE_URL);
+
+  var form = {
+    access_token: access_token,
+    home_id: options.home_id,
+    event_id: options.event_id,
+  };
+
+  request({
+    url: url,
+    method: "POST",
+    form: form,
+  }, function (err, response, body) {
+    if (err || response.statusCode != 200) {
+      return this.handleRequestError(err, response, body, "getEventsUntil error");
+    }
+
+    body = JSON.parse(body);
+
+    this.emit('get-eventsuntil', err, body.body);
+
+    if (callback) {
+      return callback(err, body.body);
+    }
+
+    return this;
+
+  }.bind(this));
+
+  return this;
+};
+
+/**
+ * https://dev.netatmo.com/doc/methods/getcamerapicture
+ * @param options
+ * @param callback
+ * @returns {*}
+ */
+netatmo.prototype.getCameraPicture = function (options, callback) {
+  // Wait until authenticated.
+  if (!access_token) {
+    return this.on('authenticated', function () {
+      this.getCameraPicture(options, callback);
+    });
+  }
+
+  if (!options) {
+    this.emit("error", new Error("getCameraPicture 'options' not set."));
+    return this;
+  }
+
+  if (!options.image_id) {
+    this.emit("error", new Error("getCameraPicture 'image_id' not set."));
+    return this;
+  }
+
+  if (!options.key) {
+    this.emit("error", new Error("getCameraPicture 'key' not set."));
+    return this;
+  }
+
+  var url = util.format('%s/api/getcamerapicture', BASE_URL);
+
+  var qs = {
+    access_token: access_token,
+    image_id: options.image_id,
+    key: options.key,
+  };
+
+  request({
+    url: url,
+    method: "GET",
+    qs: qs,
+    encoding: null,
+    contentType: 'image/jpg'
+  }, function (err, response, body) {
+    if (err || response.statusCode != 200) {
+      return this.handleRequestError(err, response, body, "getCameraPicture error");
+    }
+
+    this.emit('get-camerapicture', err, body);
+
+    if (callback) {
+      return callback(err, body);
     }
 
     return this;
