@@ -302,8 +302,13 @@ netatmo.prototype.getStationsData = function (options, callback) {
     access_token: access_token,
   };
 
-  if (options && options.app_type) {
-    form.app_type = options.app_type;
+  if (options) {
+    if (options.device_id) {
+      form.device_id = options.device_id;
+    }
+    if (options.get_favorites) {
+      form.get_favorites = options.get_favorites;
+    }
   }
 
   request({
