@@ -1,23 +1,19 @@
-netatmo
-=======================
+# netatmo [![npm version](https://img.shields.io/npm/v/netatmo.svg?maxAge=2592000)](https://www.npmjs.com/package/netatmo) [![Downloads](https://img.shields.io/npm/dm/netatmo.svg?maxAge=2592000)](https://www.npmjs.com/package/netatmo)
 
 A node.js module to interface with the [netatmo api](http://dev.netatmo.com/) API.
 
-Getting Starting
----
+## Getting Starting
 
 1. Make sure you have a netatmo account.
 2. Make sure you have at least one netatmo device set up.
 
-Install
----
+## Install
 
 ```sh
 npm install netatmo
 ```
 
-Example #1
----
+## Example #1
 
 ```javascript
 var netatmo = require('netatmo');
@@ -146,8 +142,7 @@ api.getNextEvents(options, function(err,events) {
 });
 ```
 
-Example #2
----
+## Example #2
 
 ```javascript
 var netatmo = require('netatmo');
@@ -281,8 +276,7 @@ var options = {
 api.setThermpoint();
 ```
 
-Catching Errors and Warnings
----
+## Catching Errors and Warnings
 
 ```javascript
 var netatmo = require('netatmo');
@@ -308,3 +302,7 @@ api.on("warning", function(error) {
 
 // Rest of program
 ```
+
+## License
+
+MIT © [Ali Karbassi](http://karbassi.com)
