@@ -246,8 +246,16 @@ netatmo.prototype.getDevicelist = function (options, callback) {
     access_token: access_token,
   };
 
-  if (options && options.app_type) {
-    form.app_type = options.app_type;
+  if (options) {
+    if (options.device_id) {
+      form.device_id = options.device_id;
+    }
+    if (options.get_favorites) {
+      form.get_favorites = options.get_favorites;
+    }
+    if (options.app_type) {
+      form.app_type = options.app_type;
+    }
   }
 
   request({
@@ -302,8 +310,13 @@ netatmo.prototype.getStationsData = function (options, callback) {
     access_token: access_token,
   };
 
-  if (options && options.app_type) {
-    form.app_type = options.app_type;
+  if (options) {
+    if (options.device_id) {
+      form.device_id = options.device_id;
+    }
+    if (options.get_favorites) {
+      form.get_favorites = options.get_favorites;
+    }
   }
 
   request({
@@ -742,15 +755,12 @@ netatmo.prototype.getHomeData = function (options, callback) {
   }
 
   if (options) {
-
     if (options.home_id) {
       form.home_id = options.home_id;
     }
-
     if (options.size) {
       form.size = options.size;
     }
-
   }
 
   request({
