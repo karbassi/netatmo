@@ -11,27 +11,14 @@ var api = new netatmo(auth);
 
 // EXAMPLE #1
 
-// Get User
-// See Docs: http://dev.netatmo.com/doc/restapi/getuser
-api.getUser(function(err, user) {
-  console.log(user);
-});
-
-// Get Devicelist
-// See docs: http://dev.netatmo.com/doc/restapi/devicelist
-api.getDevicelist(function(err, devices, modules) {
-  console.log(devices);
-  console.log(modules);
-});
-
 // Get Stations Data
-// See docs: https://dev.netatmo.com/doc/methods/getstationsdata
+// See docs: https://dev.netatmo.com/dev/resources/technical/reference/weatherstation/getstationsdata
 api.getStationsData(function(err, devices) {
   console.log(devices);
 });
 
 // Get Measure
-// See docs: http://dev.netatmo.com/doc/restapi/getmeasure
+// See docs: https://dev.netatmo.com/dev/resources/technical/reference/common/getmeasure
 var options = {
   device_id: '',
   scale: 'max',
@@ -43,19 +30,9 @@ api.getMeasure(options, function(err, measure) {
   console.log(measure[0]);
 });
 
-// Get Thermstate
-// See docs: http://dev.netatmo.com/doc/restapi/getthermstate
-var options = {
-  device_id: '',
-  module_id: '',
-};
-
-api.getThermstate(options, function(err, result) {
-  console.log(result);
-});
 
 // Set Sync Schedule
-// See docs: http://dev.netatmo.com/doc/restapi/syncschedule
+// See docs: https://dev.netatmo.com/dev/resources/technical/reference/thermostat/syncschedule
 var options = {
   device_id: '',
   module_id: '',
@@ -100,8 +77,8 @@ api.setSyncSchedule(options, function(err, status) {
 });
 
 
-// Set Thermstate
-// See docs: http://dev.netatmo.com/doc/restapi/setthermpoint
+// Set Thermpoint
+// See docs: https://dev.netatmo.com/dev/resources/technical/reference/thermostat/setthermpoint
 var options = {
   device_id: '',
   module_id: '',
@@ -115,18 +92,8 @@ api.setThermpoint(options, function(err, status) {
 
 // EXAMPLE #2
 
-var getUser = function(err, user) {
-  console.log(user);
-};
-
-var getDevicelist = function(err, devices, modules) {
-  console.log(devices);
-  console.log(modules);
-};
-
 var getStationsData = function(err, devices) {
   console.log(devices);
-  console.log(modules);
 };
 
 var getMeasure = function(err, measure) {
@@ -134,8 +101,8 @@ var getMeasure = function(err, measure) {
   console.log(measure[0]);
 };
 
-var getThermstate = function(err, result) {
-  console.log(result);
+var getThermostatsData = function(err, devices) {
+  console.log(devices);
 };
 
 var setSyncSchedule = function(err, status) {
@@ -146,29 +113,32 @@ var setThermpoint = function(err, status) {
   console.log(status);
 };
 
+var getHomeData = function(err, data) {
+  console.log(data);
+};
+
+var handleEvents = function(err, data) {
+  console.log(data.events_list);
+};
+
+
 // Event Listeners
-api.on('get-user', getUser);
-api.on('get-devicelist', getDevicelist);
 api.on('get-stationsdata', getStationsData);
 api.on('get-measure', getMeasure);
-api.on('get-thermstate', getThermstate);
+api.on('get-thermostatsdata', getThermostatsData);
 api.on('set-syncschedule', setSyncSchedule);
 api.on('set-thermpoint', setThermpoint);
-
-// Get User
-// See Docs: http://dev.netatmo.com/doc/restapi/getuser
-api.getUser();
-
-// Get Devicelist
-// See docs: http://dev.netatmo.com/doc/restapi/devicelist
-api.getDevicelist();
+api.on('get-homedata', getHomeData);
+api.on('get-nextevents', handleEvents);
+api.on('get-lasteventof', handleEvents);
+api.on('get-eventsuntil', handleEvents);
 
 // Get Stations Data
 // See docs: https://dev.netatmo.com/doc/methods/getstationsdata
 api.getStationsData();
 
 // Get Measure
-// See docs: http://dev.netatmo.com/doc/restapi/getmeasure
+// See docs: https://dev.netatmo.com/dev/resources/technical/reference/common/getmeasure
 var options = {
   device_id: '',
   scale: 'max',
@@ -177,17 +147,16 @@ var options = {
 
 api.getMeasure(options);
 
-// Get Thermstate
-// See docs: http://dev.netatmo.com/doc/restapi/getthermstate
+// Get Thermostats Data
+// See docs: https://dev.netatmo.com/dev/resources/technical/reference/thermostat/getthermostatsdata
 var options = {
   device_id: '',
-  module_id: '',
 };
 
-api.getThermstate();
+api.getThermostatsData(options);
 
 // Set Sync Schedule
-// See docs: http://dev.netatmo.com/doc/restapi/syncschedule
+// See docs: https://dev.netatmo.com/dev/resources/technical/reference/thermostat/syncschedule
 var options = {
   device_id: '',
   module_id: '',
@@ -227,49 +196,51 @@ var options = {
   ],
 };
 
-api.setSyncSchedule();
+api.setSyncSchedule(options);
 
 // Set Thermstate
-// See docs: http://dev.netatmo.com/doc/restapi/setthermpoint
+// See docs: https://dev.netatmo.com/dev/resources/technical/reference/thermostat/setthermpoint
 var options = {
   device_id: '',
   module_id: '',
   setpoint_mode: '',
 };
 
-api.setThermpoint();
+api.setThermpoint(options);
 
+// Get Home Data
+// https://dev.netatmo.com/dev/resources/technical/reference/cameras/gethomedata
 api.getHomeData();
 
 // Get Next Events
-// See docs: https://dev.netatmo.com/doc/methods/getnextevents
+// See docs: https://dev.netatmo.com/dev/resources/technical/reference/cameras/getnextevents
 var options = {
   home_id: '',
   event_id: ''
 };
 
-api.getNextEvents();
+api.getNextEvents(options);
 
-// Get Next Events
-// See docs: https://dev.netatmo.com/doc/methods/getlasteventof
+// Get Last Event Of
+// See docs: https://dev.netatmo.com/dev/resources/technical/reference/cameras/getlasteventof
 var options = {
   home_id: '',
   person_id: ''
 };
 
-api.getLastEventOf();
+api.getLastEventOf(options);
 
-// Get Next Events
-// See docs: https://dev.netatmo.com/doc/methods/geteventsuntil
+// Get Events Until
+// See docs: https://dev.netatmo.com/dev/resources/technical/reference/cameras/geteventsuntil
 var options = {
   home_id: '',
   event_id: ''
 };
 
-api.getEventsUntil();
+api.getEventsUntil(options);
 
-// Get Next Events
-// See docs: https://dev.netatmo.com/doc/methods/getcamerapicture
+// Get Camera Picture
+// See docs: https://dev.netatmo.com/dev/resources/technical/reference/cameras/getcamerapicture
 var options = {
   image_id: '',
   key: ''
