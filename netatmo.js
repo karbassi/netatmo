@@ -53,7 +53,7 @@ netatmo.prototype.handleRequestError = function (err, response, body, message, c
 };
 
 /**
- * http://dev.netatmo.com/doc/authentication
+ * https://dev.netatmo.com/dev/resources/technical/guides/authentication
  * @param args
  * @param callback
  * @returns {netatmo}
@@ -136,7 +136,7 @@ netatmo.prototype.authenticate = function (args, callback) {
 };
 
 /**
- * http://dev.netatmo.com/doc/authentication
+ * https://dev.netatmo.com/dev/resources/technical/guides/authentication/refreshingatoken
  * @param refresh_token
  * @returns {netatmo}
  */
@@ -176,7 +176,7 @@ netatmo.prototype.authenticate_refresh = function (refresh_token) {
 
 
 /**
- * https://dev.netatmo.com/doc/methods/getuser
+ * https://dev.netatmo.com/dev/resources/technical/reference/deprecated/getuser
  * @param callback
  * @returns {*}
  * @deprecated
@@ -221,7 +221,7 @@ netatmo.prototype.getUser = function (callback) {
 
 
 /**
- * https://dev.netatmo.com/doc/methods/devicelist
+ * https://dev.netatmo.com/dev/resources/technical/reference/deprecated/devicelist
  * @param options
  * @param callback
  * @returns {*}
@@ -286,7 +286,7 @@ netatmo.prototype.getDevicelist = function (options, callback) {
 };
 
 /**
- * https://dev.netatmo.com/doc/methods/getstationsdata
+ * https://dev.netatmo.com/dev/resources/technical/reference/weatherstation/getstationsdata
  * @param options
  * @param callback
  * @returns {*}
@@ -346,7 +346,7 @@ netatmo.prototype.getStationsData = function (options, callback) {
 };
 
 /**
- * https://dev.netatmo.com/doc/methods/getthermostatsdata
+ * https://dev.netatmo.com/dev/resources/technical/reference/thermostat/getthermostatsdata
  * @param options
  * @param callback
  * @returns {*}
@@ -395,7 +395,7 @@ netatmo.prototype.getThermostatsData = function (options, callback) {
 };
 
 /**
- * https://dev.netatmo.com/doc/methods/getmeasure
+ * https://dev.netatmo.com/dev/resources/technical/reference/common/getmeasure
  * @param options
  * @param callback
  * @returns {*}
@@ -516,7 +516,7 @@ netatmo.prototype.getMeasure = function (options, callback) {
 };
 
 /**
- * https://dev.netatmo.com/doc/methods/getthermstate
+ * https://dev.netatmo.com/dev/resources/technical/reference/deprecated/getthermstate
  * @param options
  * @param callback
  * @returns {*}
@@ -578,7 +578,7 @@ netatmo.prototype.getThermstate = function (options, callback) {
 };
 
 /**
- * https://dev.netatmo.com/doc/methods/syncschedule
+ * https://dev.netatmo.com/dev/resources/technical/reference/thermostat/syncschedule
  * @param options
  * @param callback
  * @returns {*}
@@ -651,7 +651,7 @@ netatmo.prototype.setSyncSchedule = function (options, callback) {
 };
 
 /**
- * https://dev.netatmo.com/doc/methods/setthermpoint
+ * https://dev.netatmo.com/dev/resources/technical/reference/thermostat/setthermpoint
  * @param options
  * @param callback
  * @returns {*}
@@ -730,7 +730,7 @@ netatmo.prototype.setThermpoint = function (options, callback) {
 };
 
 /**
- * https://dev.netatmo.com/doc/methods/gethomedata
+ * https://dev.netatmo.com/dev/resources/technical/reference/welcome/gethomedata
  * @param options
  * @param callback
  * @returns {*}
@@ -788,7 +788,7 @@ netatmo.prototype.getHomeData = function (options, callback) {
 };
 
 /**
- * https://dev.netatmo.com/doc/methods/getnextevents
+ * https://dev.netatmo.com/dev/resources/technical/reference/welcome/getnextevents
  * @param options
  * @param callback
  * @returns {*}
@@ -853,7 +853,7 @@ netatmo.prototype.getNextEvents = function (options, callback) {
 };
 
 /**
- * https://dev.netatmo.com/doc/methods/getlasteventof
+ * https://dev.netatmo.com/dev/resources/technical/reference/welcome/getlasteventof
  * @param options
  * @param callback
  * @returns {*}
@@ -918,7 +918,7 @@ netatmo.prototype.getLastEventOf = function (options, callback) {
 };
 
 /**
- * https://dev.netatmo.com/doc/methods/geteventsuntil
+ * https://dev.netatmo.com/dev/resources/technical/reference/welcome/geteventsuntil
  * @param options
  * @param callback
  * @returns {*}
@@ -979,7 +979,7 @@ netatmo.prototype.getEventsUntil = function (options, callback) {
 };
 
 /**
- * https://dev.netatmo.com/doc/methods/getcamerapicture
+ * https://dev.netatmo.com/dev/resources/technical/reference/welcome/getcamerapicture
  * @param options
  * @param callback
  * @returns {*}
