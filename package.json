@@ -1,6 +1,6 @@
 {
   "name": "netatmo",
-  "version": "1.6.0",
+  "version": "2.0.0",
   "description": "A node.js module to hook into the netatmo API.",
   "main": "netatmo.js",
   "scripts": {
