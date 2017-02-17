@@ -866,4 +866,53 @@ netatmo.prototype.getCameraPicture = function (options, callback) {
   return this;
 };
 
+/**
+ * https://dev.netatmo.com/dev/resources/technical/reference/healthyhomecoach/gethomecoachsdata
+ * @param options
+ * @param callback
+ * @returns {*}
+ */
+netatmo.prototype.getHealthyHomeCoachData = function (options, callback) {
+  // Wait until authenticated.
+  if (!access_token) {
+    return this.on('authenticated', function () {
+      this.getHealthyHomeCoachData(options, callback);
+    });
+  }
+
+  if (options != null && callback == null) {
+    callback = options;
+    options = null;
+  }
+
+  var url = util.format('%s/api/gethomecoachsdata?access_token=%s', BASE_URL, access_token);
+  if (options != null) {
+    url = util.format(url + '&device_id=%s', options.device_id);
+  }
+
+  request({
+    url: url,
+    method: "GET",
+  }, function (err, response, body) {
+    if (err || response.statusCode != 200) {
+      return this.handleRequestError(err, response, body, "getHealthyHomeCoachData error");
+    }
+
+    body = JSON.parse(body);
+
+    var devices = body.body.devices;
+
+    this.emit('get-healthhomecoaches-data', err, devices);
+
+    if (callback) {
+      return callback(err, devices);
+    }
+
+    return this;
+
+  }.bind(this));
+
+  return this;
+};
+
 module.exports = netatmo;
