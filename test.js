@@ -247,3 +247,12 @@ var options = {
 };
 
 api.getCameraPicture(options);
+
+// Get Healthy Home Coach Data
+// See docs: https://dev.netatmo.com/dev/resources/technical/reference/healthyhomecoach/gethomecoachsdata
+var options = {
+  device_id: '',
+};
+
+api.getHealthyHomeCoachData(options);
+
