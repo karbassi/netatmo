@@ -3,10 +3,28 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [2.1.0] / 2017-02-18
+### Added
+- Added gethomecoachsdata API call ([#28])
+
+Thank you to [@devleaks] for their pull request.
+
+## [2.0.0] / 2016-11-23
 ### Added
 - Created Changelog
 
-## [1.6.0] - 2016-07-23
+### Changed
+- Update LICENSE
+- Update documentation URLs
+- Update tests and readme to reflect new docs
+
+### Removed
+- Sunset functions [`getUser`], [`getDevicelist`], [`getThermstate`]. ([#23])
+
+Thank you to [@danilowanner] for their pull request.
+
+## [1.6.0] / 2016-07-23
 ### Added
 - [`getdevicelist`] support for `device_id`, `get_favorites` as parameters via ([#19])
 - [`getstationsdata`] support for `device_id`, `get_favorites` as parameters via ([#19])
@@ -17,7 +35,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 Thank you to [@tonyliu7870] for their pull request.
 
 
-## [1.5.0] - 2016-04-12
+## [1.5.0] / 2016-04-12
 ### Added
 - [`gethomedata`] via ([#18])
 - [`getnextevents`] via ([#18])
@@ -32,7 +50,7 @@ Thank you to [@tonyliu7870] for their pull request.
 Thank you to [@SeraphimSerapis], [@janhuddel], and [@Nibbler999] for their pull requests.
 
 
-## [1.4.0] - 2016-01-21
+## [1.4.0] / 2016-01-21
 ### Added
 - [`getthermostatsdata`] functionality via ([#14])
 - [`getstationsdata`] api call via ([#11])
@@ -59,7 +77,9 @@ Thank you to [@patricks], [@janhuddel], and [@marcuspocus] for their pull reques
 ## 1.0.0 - 2014-03-13
 
 
-[Unreleased]: https://github.com/karbassi/netatmo/compare/v1.6.0...HEAD
+[Unreleased]: https://github.com/karbassi/netatmo/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/karbassi/netatmo/compare/v2.0.0...v2.1.0
+[2.0.0]: https://github.com/karbassi/netatmo/compare/v1.6.0...v2.0.0
 [1.6.0]: https://github.com/karbassi/netatmo/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/karbassi/netatmo/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/karbassi/netatmo/compare/v1.2.0...v1.4.0
@@ -67,6 +87,15 @@ Thank you to [@patricks], [@janhuddel], and [@marcuspocus] for their pull reques
 [1.1.0]: https://github.com/karbassi/netatmo/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/karbassi/netatmo/compare/v1.0.0...v1.0.1
 
+[#28]: https://github.com/karbassi/netatmo/pull/28
+[#27]: https://github.com/karbassi/netatmo/pull/27
+[#26]: https://github.com/karbassi/netatmo/pull/26
+[#25]: https://github.com/karbassi/netatmo/pull/25
+[#24]: https://github.com/karbassi/netatmo/pull/24
+[#23]: https://github.com/karbassi/netatmo/pull/23
+[#22]: https://github.com/karbassi/netatmo/pull/22
+[#21]: https://github.com/karbassi/netatmo/pull/21
+[#29]: https://github.com/karbassi/netatmo/pull/19
 [#19]: https://github.com/karbassi/netatmo/pull/19
 [#18]: https://github.com/karbassi/netatmo/pull/18
 [#17]: https://github.com/karbassi/netatmo/pull/17
@@ -93,3 +122,5 @@ Thank you to [@patricks], [@janhuddel], and [@marcuspocus] for their pull reques
 [@patricks]: https://github.com/patricks
 [@janhuddel]: https://github.com/janhuddel
 [@marcuspocus]: https://github.com/marcuspocus
+[@danilowanner]: https://github.com/danilowanner
+[@devleaks]: https://github.com/devleaks
