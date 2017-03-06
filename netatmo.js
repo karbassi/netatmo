@@ -166,9 +166,6 @@ netatmo.prototype.authenticate_refresh = function (refresh_token) {
   }, function (err, response, body) {
     if (err || response.statusCode != 200) {
       var error = this.handleRequestError(err, response, body, "Authenticate refresh error");
-      if (callback) {
-        callback(error);
-      }
       return;
     }
 
