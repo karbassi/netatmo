@@ -1,5 +1,7 @@
 # netatmo [![npm version](https://img.shields.io/npm/v/netatmo.svg?maxAge=2592000)](https://www.npmjs.com/package/netatmo) [![Downloads](https://img.shields.io/npm/dm/netatmo.svg?maxAge=2592000)](https://www.npmjs.com/package/netatmo)
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/karbassi/netatmo.svg)](https://greenkeeper.io/)
+
 A node.js module to interface with the [netatmo api](http://dev.netatmo.com/) API.
 
 ## Getting Starting
