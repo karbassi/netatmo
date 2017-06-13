@@ -14,7 +14,7 @@ var access_token;
 var timeout;
 
 /**
- * @constructor
+ * @constructor 
  * @param args
  */
 var netatmo = function (args) {
