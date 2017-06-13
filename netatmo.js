@@ -14,7 +14,7 @@ var access_token;
 var timeout;
 
 /**
- * @constructor
+ * @constructor 
  * @param args
  */
 var netatmo = function (args) {
@@ -119,7 +119,7 @@ netatmo.prototype.authenticate = function (args, callback) {
       if (callback) {
         callback(error);
       }
-      return;
+      return error;
     }
 
     body = JSON.parse(body);
@@ -165,8 +165,7 @@ netatmo.prototype.authenticate_refresh = function (refresh_token) {
     timeout: timeout
   }, function (err, response, body) {
     if (err || response.statusCode != 200) {
-      var error = this.handleRequestError(err, response, body, "Authenticate refresh error");
-      return;
+      return this.handleRequestError(err, response, body, "Authenticate refresh error");
     }
 
     body = JSON.parse(body);
@@ -228,7 +227,7 @@ netatmo.prototype.getStationsData = function (options, callback) {
       if (callback) {
         callback(error);
       }
-      return;
+      return error;
     }
 
     body = JSON.parse(body);
@@ -282,7 +281,7 @@ netatmo.prototype.getThermostatsData = function (options, callback) {
       if (callback) {
         callback(error);
       }
-      return;
+      return error;
     }
 
     body = JSON.parse(body);
@@ -404,7 +403,7 @@ netatmo.prototype.getMeasure = function (options, callback) {
       if (callback) {
         callback(error);
       }
-      return;
+      return error;
     }
 
     body = JSON.parse(body);
@@ -484,7 +483,7 @@ netatmo.prototype.setSyncSchedule = function (options, callback) {
       if (callback) {
         callback(error);
       }
-      return;
+      return error;
     }
 
     body = JSON.parse(body);
@@ -568,7 +567,7 @@ netatmo.prototype.setThermpoint = function (options, callback) {
       if (callback) {
         callback(error);
       }
-      return;
+      return error;
     }
 
     body = JSON.parse(body);
@@ -631,7 +630,7 @@ netatmo.prototype.getHomeData = function (options, callback) {
       if (callback) {
         callback(error);
       }
-      return;
+      return error;
     }
 
     body = JSON.parse(body);
@@ -701,7 +700,7 @@ netatmo.prototype.getNextEvents = function (options, callback) {
       if (callback) {
         callback(error);
       }
-      return;
+      return error;
     }
 
     body = JSON.parse(body);
@@ -771,7 +770,7 @@ netatmo.prototype.getLastEventOf = function (options, callback) {
       if (callback) {
         callback(error);
       }
-      return;
+      return error;
     }
 
     body = JSON.parse(body);
@@ -837,7 +836,7 @@ netatmo.prototype.getEventsUntil = function (options, callback) {
       if (callback) {
         callback(error);
       }
-      return;
+      return error;
     }
 
     body = JSON.parse(body);
@@ -905,7 +904,7 @@ netatmo.prototype.getCameraPicture = function (options, callback) {
       if (callback) {
         callback(error);
       }
-      return;
+      return error;
     }
 
     this.emit('get-camerapicture', err, body);
@@ -955,7 +954,7 @@ netatmo.prototype.getHealthyHomeCoachData = function (options, callback) {
       if (callback) {
         callback(error);
       }
-      return;
+      return error;
     }
 
     body = JSON.parse(body);
