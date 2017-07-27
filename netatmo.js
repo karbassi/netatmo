@@ -34,7 +34,7 @@ util.inherits(netatmo, EventEmitter);
  */
 netatmo.prototype.handleRequestError = function (err, response, body, message, critical) {
   var errorMessage = "";
-  if (body && response.headers['content-type'] === 'application/json') {
+  if (body && response.headers["content-type"].trim().toLowerCase().indexOf("application/json") !== -1) {
     errorMessage = JSON.parse(body);
     errorMessage = errorMessage && (errorMessage.error.message || errorMessage.error);
   } else if (typeof response !== 'undefined') {
