@@ -1,10 +1,10 @@
 {
   "name": "netatmo",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "A node.js module to hook into the netatmo API.",
   "main": "netatmo.js",
   "scripts": {
-    "test": "rm -rf ./node_modules && npm install && node test.js"
+    "test": "node test.js"
   },
   "author": {
     "name": "Ali Karbassi",
@@ -24,7 +24,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "moment": "^2.18.1",
-    "request": "^2.82.0"
+    "moment": "^2.19",
+    "request": "^2.82"
   }
 }
