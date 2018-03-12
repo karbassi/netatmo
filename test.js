@@ -121,6 +121,10 @@ var handleEvents = function(err, data) {
   console.log(data.events_list);
 };
 
+var getPublicData = function(err, data) {
+  console.log(data);
+};
+
 
 // Event Listeners
 api.on('get-stationsdata', getStationsData);
@@ -132,6 +136,7 @@ api.on('get-homedata', getHomeData);
 api.on('get-nextevents', handleEvents);
 api.on('get-lasteventof', handleEvents);
 api.on('get-eventsuntil', handleEvents);
+api.on('get-publicdata', getPublicData);
 
 // Get Stations Data
 // See docs: https://dev.netatmo.com/doc/methods/getstationsdata
@@ -256,3 +261,15 @@ var options = {
 
 api.getHealthyHomeCoachData(options);
 
+// Get Public Data
+// See docs: https://dev.netatmo.com/resources/technical/reference/weatherapi/getpublicdata
+var options = {
+  lat_ne: '',
+  lon_ne: '',
+  lat_sw: '',
+  lon_sw: '',
+  required_data: '',
+  filter: false,
+};
+
+api.getPublicData(options);
