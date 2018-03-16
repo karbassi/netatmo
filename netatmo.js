@@ -915,4 +915,93 @@ netatmo.prototype.getHealthyHomeCoachData = function (options, callback) {
   return this;
 };
 
+/**
+ * https://dev.netatmo.com/resources/technical/reference/weatherapi/getpublicdata
+ * @param options
+ * @param callback
+ * @returns {*}
+ */
+netatmo.prototype.getPublicData = function (options, callback) {
+  // Wait until authenticated.
+  if (!access_token) {
+    return this.on('authenticated', function () {
+      this.getPublicData(options, callback);
+    });
+  }
+
+  if (!options) {
+    this.emit("error", new Error("getPublicData 'options' not set."));
+    return this;
+  }
+
+  if (!options.lat_ne) {
+    this.emit("error", new Error("getPublicData 'lat_ne' not set."));
+    return this;
+  }
+
+  if (!options.lon_ne) {
+    this.emit("error", new Error("getPublicData 'lon_ne' not set."));
+    return this;
+  }
+
+  if (!options.lat_sw) {
+    this.emit("error", new Error("getPublicData 'lat_sw' not set."));
+    return this;
+  }
+
+  if (!options.lon_sw) {
+    this.emit("error", new Error("getPublicData 'lat_sw' not set."));
+    return this;
+  }
+
+  if (util.isArray(options.required_data)) {
+    options.required_data = options.required_data.join(',');
+  }
+
+  // Remove any spaces from the type list if there is any.
+  options.required_data = options.required_data.replace(/\s/g, '').toLowerCase();
+
+
+  var url = util.format('%s/api/getpublicdata', BASE_URL);
+
+  var form = {
+    access_token: access_token,
+    lat_ne: options.lat_ne,
+    lon_ne: options.lon_ne,
+    lat_sw: options.lat_sw,
+    lon_sw: options.lon_sw,
+    required_data: options.required_data,
+    filter: options.filter,
+  };
+
+  request({
+    url: url,
+    method: "POST",
+    form: form,
+  }, function (err, response, body) {
+    if (err || response.statusCode != 200) {
+      var error = this.handleRequestError(err, response, body, "getPublicData error");
+      if (callback) {
+        callback(error);
+      }
+      return;
+    }
+
+    body = JSON.parse(body);
+
+    var measure = body.body;
+
+    this.emit('get-publicdata', err, measure);
+
+    if (callback) {
+      return callback(err, measure);
+    }
+
+    return this;
+
+  }.bind(this));
+
+  return this;
+};
+
 module.exports = netatmo;
