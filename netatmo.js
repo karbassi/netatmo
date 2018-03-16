@@ -136,6 +136,15 @@ netatmo.prototype.authenticate = function (args, callback) {
 };
 
 /**
+ * @returns access_token
+ */
+netatmo.prototype.getAccessToken = function () {
+  
+  return access_token
+  
+}
+
+/**
  * https://dev.netatmo.com/dev/resources/technical/guides/authentication/refreshingatoken
  * @param refresh_token
  * @returns {netatmo}
