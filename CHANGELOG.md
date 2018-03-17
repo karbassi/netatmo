@@ -3,8 +3,14 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [2.2.0] / 2018-03-17
 ### Added
-- Added getPublicData API call
+- Added getPublicData API call ([#38])
+
+### Changed
+- Update dependencies. ([#37])
+- Fixed return the server response message on error ([#34])
 
 ## [2.1.0] / 2017-02-18
 ### Added
@@ -79,7 +85,8 @@ Thank you to [@patricks], [@janhuddel], and [@marcuspocus] for their pull reques
 ## 1.0.0 - 2014-03-13
 
 
-[Unreleased]: https://github.com/karbassi/netatmo/compare/v2.1.0...HEAD
+[Unreleased]: https://github.com/karbassi/netatmo/compare/v2.2.0...HEAD
+[2.2.0]: https://github.com/karbassi/netatmo/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/karbassi/netatmo/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/karbassi/netatmo/compare/v1.6.0...v2.0.0
 [1.6.0]: https://github.com/karbassi/netatmo/compare/v1.5.0...v1.6.0
@@ -89,6 +96,9 @@ Thank you to [@patricks], [@janhuddel], and [@marcuspocus] for their pull reques
 [1.1.0]: https://github.com/karbassi/netatmo/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/karbassi/netatmo/compare/v1.0.0...v1.0.1
 
+[#38]: https://github.com/karbassi/netatmo/pull/38
+[#37]: https://github.com/karbassi/netatmo/pull/37
+[#34]: https://github.com/karbassi/netatmo/pull/34
 [#28]: https://github.com/karbassi/netatmo/pull/28
 [#27]: https://github.com/karbassi/netatmo/pull/27
 [#26]: https://github.com/karbassi/netatmo/pull/26
