@@ -4,6 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [2.2.1] / 2018-04-30
+### Changed
+- Updated dependencies to fix security issue.
+
 ## [2.2.0] / 2018-03-17
 ### Added
 - Added getPublicData API call ([#38])
@@ -85,7 +89,8 @@ Thank you to [@patricks], [@janhuddel], and [@marcuspocus] for their pull reques
 ## 1.0.0 - 2014-03-13
 
 
-[Unreleased]: https://github.com/karbassi/netatmo/compare/v2.2.0...HEAD
+[Unreleased]: https://github.com/karbassi/netatmo/compare/v2.2.1...HEAD
+[2.2.1]: https://github.com/karbassi/netatmo/compare/v2.2.0...v2.2.1
 [2.2.0]: https://github.com/karbassi/netatmo/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/karbassi/netatmo/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/karbassi/netatmo/compare/v1.6.0...v2.0.0
