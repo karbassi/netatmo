@@ -24,7 +24,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "moment": "^2.19",
-    "request": "^2.82"
+    "moment": "^2.22.1",
+    "request": "^2.85.0"
   }
 }
