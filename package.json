@@ -26,5 +26,8 @@
   "dependencies": {
     "moment": "^2.22.2",
     "request": "^2.85.0"
+  },
+  "devDependencies": {
+    "dotenv": "^6.1.0"
   }
 }

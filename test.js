@@ -1,31 +1,35 @@
+require('dotenv').load();
+
 var netatmo = require('./netatmo');
 
-var auth = {
-  "client_id": "",
-  "client_secret": "",
-  "username": "",
-  "password": "",
+const auth = {
+  "client_id": process.env.CLIENT_ID,
+  "client_secret": process.env.CLIENT_SECRET,
+  "username": process.env.USERNAME,
+  "password": process.env.PASSWORD,
 };
 
-var api = new netatmo(auth);
+const api = new netatmo(auth);
 
 // EXAMPLE #1
 
+let options;
+
 // Get Stations Data
 // See docs: https://dev.netatmo.com/dev/resources/technical/reference/weatherstation/getstationsdata
-api.getStationsData(function(err, devices) {
+api.getStationsData((err, devices) => {
   console.log(devices);
 });
 
 // Get Measure
 // See docs: https://dev.netatmo.com/dev/resources/technical/reference/common/getmeasure
-var options = {
+options = {
   device_id: '',
   scale: 'max',
   type: ['Temperature', 'CO2', 'Humidity', 'Pressure', 'Noise'],
 };
 
-api.getMeasure(options, function(err, measure) {
+api.getMeasure(options, (err, measure) => {
   console.log(measure.length);
   console.log(measure[0]);
 });
@@ -33,7 +37,7 @@ api.getMeasure(options, function(err, measure) {
 
 // Set Sync Schedule
 // See docs: https://dev.netatmo.com/dev/resources/technical/reference/thermostat/syncschedule
-var options = {
+options = {
   device_id: '',
   module_id: '',
   zones: [
@@ -72,56 +76,56 @@ var options = {
   ],
 };
 
-api.setSyncSchedule(options, function(err, status) {
+api.setSyncSchedule(options, (err, status) => {
   console.log(status);
 });
 
 
 // Set Thermpoint
 // See docs: https://dev.netatmo.com/dev/resources/technical/reference/thermostat/setthermpoint
-var options = {
+options = {
   device_id: '',
   module_id: '',
   setpoint_mode: '',
 };
 
-api.setThermpoint(options, function(err, status) {
+api.setThermpoint(options, (err, status) => {
   console.log(status);
 });
 
 
 // EXAMPLE #2
 
-var getStationsData = function(err, devices) {
+const getStationsData = (err, devices) => {
   console.log(devices);
 };
 
-var getMeasure = function(err, measure) {
+const getMeasure = (err, measure) => {
   console.log(measure.length);
   console.log(measure[0]);
 };
 
-var getThermostatsData = function(err, devices) {
+const getThermostatsData = (err, devices) => {
   console.log(devices);
 };
 
-var setSyncSchedule = function(err, status) {
+const setSyncSchedule = (err, status) => {
   console.log(status);
 };
 
-var setThermpoint = function(err, status) {
+const setThermpoint = (err, status) => {
   console.log(status);
 };
 
-var getHomeData = function(err, data) {
+const getHomeData = (err, data) => {
   console.log(data);
 };
 
-var handleEvents = function(err, data) {
+const handleEvents = (err, data) => {
   console.log(data.events_list);
 };
 
-var getPublicData = function(err, data) {
+const getPublicData = (err, data) => {
   console.log(data);
 };
 
@@ -144,7 +148,7 @@ api.getStationsData();
 
 // Get Measure
 // See docs: https://dev.netatmo.com/dev/resources/technical/reference/common/getmeasure
-var options = {
+options = {
   device_id: '',
   scale: 'max',
   type: ['Temperature', 'CO2', 'Humidity', 'Pressure', 'Noise'],
@@ -154,7 +158,7 @@ api.getMeasure(options);
 
 // Get Thermostats Data
 // See docs: https://dev.netatmo.com/dev/resources/technical/reference/thermostat/getthermostatsdata
-var options = {
+options = {
   device_id: '',
 };
 
@@ -162,7 +166,7 @@ api.getThermostatsData(options);
 
 // Set Sync Schedule
 // See docs: https://dev.netatmo.com/dev/resources/technical/reference/thermostat/syncschedule
-var options = {
+options = {
   device_id: '',
   module_id: '',
   zones: [
@@ -205,7 +209,7 @@ api.setSyncSchedule(options);
 
 // Set Thermstate
 // See docs: https://dev.netatmo.com/dev/resources/technical/reference/thermostat/setthermpoint
-var options = {
+options = {
   device_id: '',
   module_id: '',
   setpoint_mode: '',
@@ -219,7 +223,7 @@ api.getHomeData();
 
 // Get Next Events
 // See docs: https://dev.netatmo.com/dev/resources/technical/reference/cameras/getnextevents
-var options = {
+options = {
   home_id: '',
   event_id: ''
 };
@@ -228,7 +232,7 @@ api.getNextEvents(options);
 
 // Get Last Event Of
 // See docs: https://dev.netatmo.com/dev/resources/technical/reference/cameras/getlasteventof
-var options = {
+options = {
   home_id: '',
   person_id: ''
 };
@@ -237,7 +241,7 @@ api.getLastEventOf(options);
 
 // Get Events Until
 // See docs: https://dev.netatmo.com/dev/resources/technical/reference/cameras/geteventsuntil
-var options = {
+options = {
   home_id: '',
   event_id: ''
 };
@@ -246,7 +250,7 @@ api.getEventsUntil(options);
 
 // Get Camera Picture
 // See docs: https://dev.netatmo.com/dev/resources/technical/reference/cameras/getcamerapicture
-var options = {
+options = {
   image_id: '',
   key: ''
 };
@@ -255,7 +259,7 @@ api.getCameraPicture(options);
 
 // Get Healthy Home Coach Data
 // See docs: https://dev.netatmo.com/dev/resources/technical/reference/healthyhomecoach/gethomecoachsdata
-var options = {
+options = {
   device_id: '',
 };
 
@@ -263,7 +267,7 @@ api.getHealthyHomeCoachData(options);
 
 // Get Public Data
 // See docs: https://dev.netatmo.com/resources/technical/reference/weatherapi/getpublicdata
-var options = {
+options = {
   lat_ne: '',
   lon_ne: '',
   lat_sw: '',
