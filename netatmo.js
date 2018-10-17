@@ -38,12 +38,12 @@ netatmo.prototype.handleRequestError = function (err, response, body, message, c
     errorMessage = JSON.parse(body);
     errorMessage = errorMessage && (errorMessage.error.message || errorMessage.error);
   } else if (typeof response !== 'undefined') {
-    errorMessage = "Status code" + response.statusCode;
+    errorMessage = `Status code${response.statusCode}`;
   }
   else {
     errorMessage = "No response";
   }
-  const error = new Error(message + ": " + errorMessage);
+  const error = new Error(`${message}: ${errorMessage}`);
   if (critical) {
     this.emit("error", error);
   } else {
@@ -104,7 +104,7 @@ netatmo.prototype.authenticate = function (args, callback) {
     grant_type: 'password',
   };
 
-  const url = util.format('%s/oauth2/token', BASE_URL);
+  const url = `${BASE_URL}/oauth2/token`;
 
   request({
     url: url,
@@ -149,7 +149,7 @@ netatmo.prototype.authenticate_refresh = function (refresh_token) {
     client_secret: client_secret,
   };
 
-  const url = util.format('%s/oauth2/token', BASE_URL);
+  const url = `${BASE_URL}/oauth2/token`;
 
   request({
     url: url,
@@ -193,7 +193,7 @@ netatmo.prototype.getStationsData = function (options, callback) {
     options = null;
   }
 
-  const url = util.format('%s/api/getstationsdata', BASE_URL);
+  const url = `${BASE_URL}/api/getstationsdata`;
 
   const form = {
     access_token: access_token,
@@ -253,9 +253,9 @@ netatmo.prototype.getThermostatsData = function (options, callback) {
     options = null;
   }
 
-  let url = util.format('%s/api/getthermostatsdata?access_token=%s', BASE_URL, access_token);
+  let url = `${BASE_URL}/api/getthermostatsdata?access_token=${access_token}`;
   if (options != null) {
-    url = util.format(url + '&device_id=%s', options.device_id);
+    url = `${url}&device_id=${options.device_id}`;
   }
 
   request({
@@ -325,7 +325,7 @@ netatmo.prototype.getMeasure = function (options, callback) {
   options.type = options.type.replace(/\s/g, '').toLowerCase();
 
 
-  const url = util.format('%s/api/getmeasure', BASE_URL);
+  const url = `${BASE_URL}/api/getmeasure`;
 
   const form = {
     access_token: access_token,
@@ -443,7 +443,7 @@ netatmo.prototype.setSyncSchedule = function (options, callback) {
     return this;
   }
 
-  const url = util.format('%s/api/syncschedule', BASE_URL);
+  const url = `${BASE_URL}/api/syncschedule`;
 
   const form = {
     access_token: access_token,
@@ -511,7 +511,7 @@ netatmo.prototype.setThermpoint = function (options, callback) {
     return this;
   }
 
-  const url = util.format('%s/api/setthermpoint', BASE_URL);
+  const url = `${BASE_URL}/api/setthermpoint`;
 
   const form = {
     access_token: access_token,
@@ -570,7 +570,7 @@ netatmo.prototype.getHomeData = function (options, callback) {
     });
   }
 
-  const url = util.format('%s/api/gethomedata', BASE_URL);
+  const url = `${BASE_URL}/api/gethomedata`;
 
   const form = {
     access_token: access_token
@@ -643,7 +643,7 @@ netatmo.prototype.getNextEvents = function (options, callback) {
     return this;
   }
 
-  const url = util.format('%s/api/getnextevents', BASE_URL);
+  const url = `${BASE_URL}/api/getnextevents`;
 
   const form = {
     access_token: access_token,
@@ -708,7 +708,7 @@ netatmo.prototype.getLastEventOf = function (options, callback) {
     return this;
   }
 
-  const url = util.format('%s/api/getlasteventof', BASE_URL);
+  const url = `${BASE_URL}/api/getlasteventof`;
 
   const form = {
     access_token: access_token,
@@ -773,7 +773,7 @@ netatmo.prototype.getEventsUntil = function (options, callback) {
     return this;
   }
 
-  const url = util.format('%s/api/geteventsuntil', BASE_URL);
+  const url = `${BASE_URL}/api/geteventsuntil`;
 
   const form = {
     access_token: access_token,
@@ -834,7 +834,7 @@ netatmo.prototype.getCameraPicture = function (options, callback) {
     return this;
   }
 
-  const url = util.format('%s/api/getcamerapicture', BASE_URL);
+  const url = `${BASE_URL}/api/getcamerapicture`;
 
   const qs = {
     access_token: access_token,
@@ -885,9 +885,9 @@ netatmo.prototype.getHealthyHomeCoachData = function (options, callback) {
     options = null;
   }
 
-  let url = util.format('%s/api/gethomecoachsdata?access_token=%s', BASE_URL, access_token);
+  let url = `${BASE_URL}/api/gethomecoachsdata?access_token=${access_token}`;
   if (options != null) {
-    url = util.format(url + '&device_id=%s', options.device_id);
+    url = `${url}&device_id=${options.device_id}`;
   }
 
   request({
@@ -962,7 +962,7 @@ netatmo.prototype.getPublicData = function (options, callback) {
   options.required_data = options.required_data.replace(/\s/g, '').toLowerCase();
 
 
-  const url = util.format('%s/api/getpublicdata', BASE_URL);
+  const url = `${BASE_URL}/api/getpublicdata`;
 
   const form = {
     access_token: access_token,
