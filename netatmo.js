@@ -1,7 +1,6 @@
 var util = require('util');
 var EventEmitter = require("events").EventEmitter;
 var request = require('request');
-var moment = require('moment');
 
 const BASE_URL = 'https://api.netatmo.net';
 
@@ -341,20 +340,26 @@ netatmo.prototype.getMeasure = function (options, callback) {
     }
 
     if (options.date_begin) {
-      if (options.date_begin <= 1E10) {
-        options.date_begin *= 1E3;
+      options.date_begin = parseInt(options.date_begin, 10);
+
+      if (options.date_begin >= 1E10) {
+        options.date_begin /= 1E3;
       }
 
-      form.date_begin = moment(options.date_begin).utc().unix();
+      form.date_begin = options.date_begin;
     }
 
     if (options.date_end === 'last') {
       form.date_end = 'last';
     } else if (options.date_end) {
-      if (options.date_end <= 1E10) {
-        options.date_end *= 1E3;
+
+      options.date_end = parseInt(options.date_end, 10);
+
+      if (options.date_end >= 1E10) {
+        options.date_end /= 1E3;
       }
-      form.date_end = moment(options.date_end).utc().unix();
+
+      form.date_end = options.date_end;
     }
 
     if (options.limit) {
