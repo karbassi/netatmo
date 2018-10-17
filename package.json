@@ -1,6 +1,6 @@
 {
   "name": "netatmo",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "A node.js module to hook into the netatmo API.",
   "main": "netatmo.js",
   "scripts": {
@@ -24,7 +24,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "moment": "^2.22.1",
+    "moment": "^2.22.2",
     "request": "^2.85.0"
   }
 }
