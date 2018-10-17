@@ -110,7 +110,7 @@ netatmo.prototype.authenticate = function (args, callback) {
     url: url,
     method: "POST",
     form: form,
-  }, function (err, response, body) {
+  }, (err, response, body) => {
     if (err || response.statusCode != 200) {
       return this.handleRequestError(err, response, body, "Authenticate error", true);
     }
@@ -130,7 +130,7 @@ netatmo.prototype.authenticate = function (args, callback) {
     }
 
     return this;
-  }.bind(this));
+  });
 
   return this;
 };
@@ -155,7 +155,7 @@ netatmo.prototype.authenticate_refresh = function (refresh_token) {
     url: url,
     method: "POST",
     form: form,
-  }, function (err, response, body) {
+  }, (err, response, body) => {
     if (err || response.statusCode != 200) {
       return this.handleRequestError(err, response, body, "Authenticate refresh error");
     }
@@ -169,7 +169,7 @@ netatmo.prototype.authenticate_refresh = function (refresh_token) {
     }
 
     return this;
-  }.bind(this));
+  });
 
   return this;
 };
@@ -212,7 +212,7 @@ netatmo.prototype.getStationsData = function (options, callback) {
     url: url,
     method: "POST",
     form: form,
-  }, function (err, response, body) {
+  }, (err, response, body) => {
     if (err || response.statusCode != 200) {
       return this.handleRequestError(err, response, body, "getStationsDataError error");
     }
@@ -229,7 +229,7 @@ netatmo.prototype.getStationsData = function (options, callback) {
 
     return this;
 
-  }.bind(this));
+  });
 
   return this;
 };
@@ -261,7 +261,7 @@ netatmo.prototype.getThermostatsData = function (options, callback) {
   request({
     url: url,
     method: "GET",
-  }, function (err, response, body) {
+  }, (err, response, body) => {
     if (err || response.statusCode != 200) {
       return this.handleRequestError(err, response, body, "getThermostatsDataError error");
     }
@@ -278,7 +278,7 @@ netatmo.prototype.getThermostatsData = function (options, callback) {
 
     return this;
 
-  }.bind(this));
+  });
 
   return this;
 };
@@ -378,7 +378,7 @@ netatmo.prototype.getMeasure = function (options, callback) {
     url: url,
     method: "POST",
     form: form,
-  }, function (err, response, body) {
+  }, (err, response, body) => {
     if (err || response.statusCode != 200) {
       var error = this.handleRequestError(err, response, body, "getMeasure error");
       if (callback) {
@@ -399,7 +399,7 @@ netatmo.prototype.getMeasure = function (options, callback) {
 
     return this;
 
-  }.bind(this));
+  });
 
   return this;
 };
@@ -457,7 +457,7 @@ netatmo.prototype.setSyncSchedule = function (options, callback) {
     url: url,
     method: "POST",
     form: form,
-  }, function (err, response, body) {
+  }, (err, response, body) => {
     if (err || response.statusCode != 200) {
       return this.handleRequestError(err, response, body, "setSyncSchedule error");
     }
@@ -472,7 +472,7 @@ netatmo.prototype.setSyncSchedule = function (options, callback) {
 
     return this;
 
-  }.bind(this));
+  });
 
   return this;
 };
@@ -536,7 +536,7 @@ netatmo.prototype.setThermpoint = function (options, callback) {
     url: url,
     method: "POST",
     form: form,
-  }, function (err, response, body) {
+  }, (err, response, body) => {
     if (err || response.statusCode != 200) {
       return this.handleRequestError(err, response, body, "setThermpoint error");
     }
@@ -551,7 +551,7 @@ netatmo.prototype.setThermpoint = function (options, callback) {
 
     return this;
 
-  }.bind(this));
+  });
 
   return this;
 };
@@ -594,7 +594,7 @@ netatmo.prototype.getHomeData = function (options, callback) {
     url: url,
     method: "POST",
     form: form,
-  }, function (err, response, body) {
+  }, (err, response, body) => {
     if (err || response.statusCode != 200) {
       return this.handleRequestError(err, response, body, "getHomeData error");
     }
@@ -609,7 +609,7 @@ netatmo.prototype.getHomeData = function (options, callback) {
 
     return this;
 
-  }.bind(this));
+  });
 
   return this;
 };
@@ -659,7 +659,7 @@ netatmo.prototype.getNextEvents = function (options, callback) {
     url: url,
     method: "POST",
     form: form,
-  }, function (err, response, body) {
+  }, (err, response, body) => {
     if (err || response.statusCode != 200) {
       return this.handleRequestError(err, response, body, "getNextEvents error");
     }
@@ -674,7 +674,7 @@ netatmo.prototype.getNextEvents = function (options, callback) {
 
     return this;
 
-  }.bind(this));
+  });
 
   return this;
 };
@@ -724,7 +724,7 @@ netatmo.prototype.getLastEventOf = function (options, callback) {
     url: url,
     method: "POST",
     form: form,
-  }, function (err, response, body) {
+  }, (err, response, body) => {
     if (err || response.statusCode != 200) {
       return this.handleRequestError(err, response, body, "getLastEventOf error");
     }
@@ -739,7 +739,7 @@ netatmo.prototype.getLastEventOf = function (options, callback) {
 
     return this;
 
-  }.bind(this));
+  });
 
   return this;
 };
@@ -785,7 +785,7 @@ netatmo.prototype.getEventsUntil = function (options, callback) {
     url: url,
     method: "POST",
     form: form,
-  }, function (err, response, body) {
+  }, (err, response, body) => {
     if (err || response.statusCode != 200) {
       return this.handleRequestError(err, response, body, "getEventsUntil error");
     }
@@ -800,7 +800,7 @@ netatmo.prototype.getEventsUntil = function (options, callback) {
 
     return this;
 
-  }.bind(this));
+  });
 
   return this;
 };
@@ -848,7 +848,7 @@ netatmo.prototype.getCameraPicture = function (options, callback) {
     qs: qs,
     encoding: null,
     contentType: 'image/jpg'
-  }, function (err, response, body) {
+  }, (err, response, body) => {
     if (err || response.statusCode != 200) {
       return this.handleRequestError(err, response, body, "getCameraPicture error");
     }
@@ -861,7 +861,7 @@ netatmo.prototype.getCameraPicture = function (options, callback) {
 
     return this;
 
-  }.bind(this));
+  });
 
   return this;
 };
@@ -893,7 +893,7 @@ netatmo.prototype.getHealthyHomeCoachData = function (options, callback) {
   request({
     url: url,
     method: "GET",
-  }, function (err, response, body) {
+  }, (err, response, body) => {
     if (err || response.statusCode != 200) {
       return this.handleRequestError(err, response, body, "getHealthyHomeCoachData error");
     }
@@ -910,7 +910,7 @@ netatmo.prototype.getHealthyHomeCoachData = function (options, callback) {
 
     return this;
 
-  }.bind(this));
+  });
 
   return this;
 };
@@ -978,7 +978,7 @@ netatmo.prototype.getPublicData = function (options, callback) {
     url: url,
     method: "POST",
     form: form,
-  }, function (err, response, body) {
+  }, (err, response, body) => {
     if (err || response.statusCode != 200) {
       var error = this.handleRequestError(err, response, body, "getPublicData error");
       if (callback) {
@@ -999,7 +999,7 @@ netatmo.prototype.getPublicData = function (options, callback) {
 
     return this;
 
-  }.bind(this));
+  });
 
   return this;
 };
