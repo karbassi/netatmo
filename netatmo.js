@@ -1010,11 +1010,11 @@ netatmo.prototype.getPublicData = function (options, callback) {
  * @param callback
  * @returns {*}
  */
-netatmo.prototype.getHomesData = function (options, callback) {
+netatmo.prototype.homesData = function (options, callback) {
   // Wait until authenticated.
   if (!access_token) {
     return this.on('authenticated', function () {
-      this.getHomesData(options, callback);
+      this.homesData(options, callback);
     });
   }
 
@@ -1044,7 +1044,7 @@ netatmo.prototype.getHomesData = function (options, callback) {
     form: form,
   }, function (err, response, body) {
     if (err || response.statusCode != 200) {
-      return this.handleRequestError(err, response, body, "getHomesData error");
+      return this.handleRequestError(err, response, body, "homesData error");
     }
 
     body = JSON.parse(body);
@@ -1068,21 +1068,21 @@ netatmo.prototype.getHomesData = function (options, callback) {
  * @param callback
  * @returns {*}
  */
-netatmo.prototype.getHomeStatus = function (options, callback) {
+netatmo.prototype.homeStatus = function (options, callback) {
   // Wait until authenticated.
   if (!access_token) {
     return this.on('authenticated', function () {
-      this.getHomeStatus(options, callback);
+      this.homeStatus(options, callback);
     });
   }
 
   if (!options) {
-    this.emit("error", new Error("getHomeStatus 'options' not set."));
+    this.emit("error", new Error("homeStatus 'options' not set."));
     return this;
   }
 
   if (!options.home_id) {
-    this.emit("error", new Error("getHomeStatus 'home_id' not set."));
+    this.emit("error", new Error("homeStatus 'home_id' not set."));
     return this;
   }
 
@@ -1105,7 +1105,7 @@ netatmo.prototype.getHomeStatus = function (options, callback) {
     form: form,
   }, function (err, response, body) {
     if (err || response.statusCode != 200) {
-      return this.handleRequestError(err, response, body, "getHomeStatus error");
+      return this.handleRequestError(err, response, body, "homeStatus error");
     }
 
     body = JSON.parse(body);
