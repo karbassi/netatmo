@@ -1090,7 +1090,7 @@ netatmo.prototype.homeStatus = function (options, callback) {
 
   var form = {
     access_token: access_token,
-	home_id: options.home_id,
+	  home_id: options.home_id,
   };
 
   if (options) {
@@ -1111,6 +1111,134 @@ netatmo.prototype.homeStatus = function (options, callback) {
     body = JSON.parse(body);
 
     this.emit('get-homestatus', err, body.body);
+
+    if (callback) {
+      return callback(err, body.body);
+    }
+
+    return this;
+
+  }.bind(this));
+
+  return this;
+};
+
+/**
+ * https://dev.netatmo.com/resources/technical/reference/energy/setthermmode
+ * @param options
+ * @param callback
+ * @returns {*}
+ */
+netatmo.prototype.setThermMode = function (options, callback) {
+  // Wait until authenticated.
+  if (!access_token) {
+    return this.on('authenticated', function () {
+      this.setThermMode(options, callback);
+    });
+  }
+
+  if (!options) {
+    this.emit("error", new Error("setThermMode 'options' not set."));
+    return this;
+  }
+
+  if (!options.home_id) {
+    this.emit("error", new Error("setThermMode 'home_id' not set."));
+    return this;
+  }
+
+  var url = util.format('%s/api/setthermmode', BASE_URL);
+
+  var form = {
+    access_token: access_token,
+    home_id: options.home_id,
+    mode: options.mode,
+  };
+
+  if (options) {
+    if (options.endtime) {
+      form.endtime = options.endtime;
+    }
+  }
+ 
+  request({
+    url: url,
+    method: "POST",
+    form: form,
+  }, function (err, response, body) {
+    if (err || response.statusCode != 200) {
+      return this.handleRequestError(err, response, body, "setThermMode error");
+    }
+
+    body = JSON.parse(body);
+
+    this.emit('get-setthermmode', err, body.body);
+
+    if (callback) {
+      return callback(err, body.body);
+    }
+
+    return this;
+
+  }.bind(this));
+
+  return this;
+};
+
+/**
+ * https://dev.netatmo.com/resources/technical/reference/energy/setroomthermpoint
+ * @param options
+ * @param callback
+ * @returns {*}
+ */
+netatmo.prototype.setRoomThermPoint = function (options, callback) {
+  // Wait until authenticated.
+  if (!access_token) {
+    return this.on('authenticated', function () {
+      this.setRoomThermPoint(options, callback);
+    });
+  }
+
+  if (!options) {
+    this.emit("error", new Error("setRoomThermPoint 'options' not set."));
+    return this;
+  }
+
+  if (!options.home_id) {
+    this.emit("error", new Error("setRoomThermPoint 'home_id' not set."));
+    return this;
+  }
+
+  var url = util.format('%s/api/setroomthermpoint', BASE_URL);
+
+  var form = {
+    access_token: access_token,
+    home_id: options.home_id,
+    room_id: options.room_id,
+    mode: options.mode,
+  };
+
+  if (options) {
+    if (options.temp) {
+      form.temp = options.temp;
+    }
+    if (options.endtime) {
+      form.endtime = options.endtime;
+    }
+  }
+ 
+  request({
+    url: url,
+    method: "POST",
+    form: form,
+  }, function (err, response, body) {
+    if (err || response.statusCode != 200) {
+      return this.handleRequestError(err, response, body, "setRoomThermPoint error");
+    }
+
+    body = JSON.parse(body);
+
+    this.emit('get-setroomthermpoint', err, body.body);
 
     if (callback) {
       return callback(err, body.body);
