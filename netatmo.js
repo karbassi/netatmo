@@ -1172,10 +1172,10 @@ netatmo.prototype.setThermMode = function (options, callback) {
 
     body = JSON.parse(body);
 
-    this.emit('get-setthermmode', err, body.body);
+    this.emit('get-setthermmode', err, body);
 
     if (callback) {
-      return callback(err, body.body);
+      return callback(err, body);
     }
 
     return this;
@@ -1238,10 +1238,10 @@ netatmo.prototype.setRoomThermPoint = function (options, callback) {
 
     body = JSON.parse(body);
 
-    this.emit('get-setroomthermpoint', err, body.body);
+    this.emit('get-setroomthermpoint', err, body);
 
     if (callback) {
-      return callback(err, body.body);
+      return callback(err, body);
     }
 
     return this;
