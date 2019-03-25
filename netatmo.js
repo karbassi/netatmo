@@ -615,6 +615,119 @@ netatmo.prototype.getHomeData = function (options, callback) {
 };
 
 /**
+ * https://dev.netatmo.com/resources/technical/reference/energy/homesdata
+ * @param options
+ * @param callback
+ * @returns {*}
+ */
+netatmo.prototype.getHomesData = function (options, callback) {
+  // Wait until authenticated.
+  if (!access_token) {
+    return this.on('authenticated', function () {
+      this.getHomesData(options, callback);
+    });
+  }
+
+  var url = util.format('%s/api/homesdata', BASE_URL);
+
+  var form = {
+    access_token: access_token
+  };
+
+  if (options != null && callback == null) {
+    callback = options;
+    options = null;
+  }
+
+  if (options) {
+    if (options.home_id) form.home_id = options.home_id;
+    if (options.gateway_types) form.gateway_types = options.gateway_types;
+  }
+
+  request({
+    url: url,
+    method: "POST",
+    form: form,
+  }, function (err, response, body) {
+    if (err || response.statusCode != 200) {
+      return this.handleRequestError(err, response, body, "getHomesData error");
+    }
+
+    body = JSON.parse(body);
+
+    this.emit('get-homesdata', err, body.body);
+
+    if (callback) {
+      return callback(err, body.body);
+    }
+
+    return this;
+
+  }.bind(this));
+
+  return this;
+};
+
+/**
+ * https://dev.netatmo.com/resources/technical/reference/energy/homestatus
+ * @param options
+ * @param callback
+ * @returns {*}
+ */
+netatmo.prototype.getHomeStatus = function (options, callback) {
+  // Wait until authenticated.
+  if (!access_token) {
+    return this.on('authenticated', function () {
+      this.getHomeStatus(options, callback);
+    });
+  }
+
+  if (!options.home_id) {
+    this.emit("error", new Error("getHomeStatus 'home_id' not set."));
+    return this;
+  }
+
+  var url = util.format('%s/api/homestatus', BASE_URL);
+
+  var form = {
+    access_token: access_token
+  };
+
+  if (options != null && callback == null) {
+    callback = options;
+    options = null;
+  }
+
+  if (options) {
+    if (options.home_id) form.home_id = options.home_id;
+    if (options.device_types) form.device_types = options.device_types;
+  }
+
+  request({
+    url: url,
+    method: "POST",
+    form: form,
+  }, function (err, response, body) {
+    if (err || response.statusCode != 200) {
+      return this.handleRequestError(err, response, body, "getHomeStatus error");
+    }
+
+    body = JSON.parse(body);
+
+    this.emit('get-homestatus', err, body.body);
+
+    if (callback) {
+      return callback(err, body.body);
+    }
+
+    return this;
+
+  }.bind(this));
+
+  return this;
+};
+
+/**
  * https://dev.netatmo.com/dev/resources/technical/reference/welcome/getnextevents
  * @param options
  * @param callback
