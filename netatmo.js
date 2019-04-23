@@ -1117,4 +1117,251 @@ netatmo.prototype.getPublicData = function (options, callback) {
   return this;
 };
 
+/**
+ * https://dev.netatmo.com/resources/technical/reference/energy/homesdata
+ * @param options
+ * @param callback
+ * @returns {*}
+ */
+netatmo.prototype.homesData = function (options, callback) {
+  // Wait until authenticated.
+  if (!access_token) {
+    return this.on('authenticated', function () {
+      this.homesData(options, callback);
+    });
+  }
+
+  if (options != null && callback == null) {
+    callback = options;
+    options = null;
+  }
+
+  var url = util.format('%s/api/homesdata', BASE_URL);
+
+  var form = {
+    access_token: access_token,
+  };
+
+  if (options) {
+    if (options.home_id) {
+      form.home_id = options.home_id;
+    }
+    if (options.gateway_types) {
+      form.gateway_types = options.gateway_types;
+    }
+  }
+
+  request({
+    url: url,
+    method: "POST",
+    form: form,
+  }, function (err, response, body) {
+    if (err || response.statusCode != 200) {
+      return this.handleRequestError(err, response, body, "homesData error");
+    }
+
+    body = JSON.parse(body);
+
+    this.emit('get-homesdata', err, body.body);
+
+    if (callback) {
+      return callback(err, body.body);
+    }
+
+    return this;
+
+  }.bind(this));
+
+  return this;
+};
+
+/**
+ * https://dev.netatmo.com/resources/technical/reference/energy/homesdata
+ * @param options
+ * @param callback
+ * @returns {*}
+ */
+netatmo.prototype.homeStatus = function (options, callback) {
+  // Wait until authenticated.
+  if (!access_token) {
+    return this.on('authenticated', function () {
+      this.homeStatus(options, callback);
+    });
+  }
+
+  if (!options) {
+    this.emit("error", new Error("homeStatus 'options' not set."));
+    return this;
+  }
+
+  if (!options.home_id) {
+    this.emit("error", new Error("homeStatus 'home_id' not set."));
+    return this;
+  }
+
+  var url = util.format('%s/api/homestatus', BASE_URL);
+
+  var form = {
+    access_token: access_token,
+	  home_id: options.home_id,
+  };
+
+  if (options) {
+    if (options.device_types) {
+      form.device_types = options.device_types;
+    }
+  }
+ 
+  request({
+    url: url,
+    method: "POST",
+    form: form,
+  }, function (err, response, body) {
+    if (err || response.statusCode != 200) {
+      return this.handleRequestError(err, response, body, "homeStatus error");
+    }
+
+    body = JSON.parse(body);
+
+    this.emit('get-homestatus', err, body.body);
+
+    if (callback) {
+      return callback(err, body.body);
+    }
+
+    return this;
+
+  }.bind(this));
+
+  return this;
+};
+
+/**
+ * https://dev.netatmo.com/resources/technical/reference/energy/setthermmode
+ * @param options
+ * @param callback
+ * @returns {*}
+ */
+netatmo.prototype.setThermMode = function (options, callback) {
+  // Wait until authenticated.
+  if (!access_token) {
+    return this.on('authenticated', function () {
+      this.setThermMode(options, callback);
+    });
+  }
+
+  if (!options) {
+    this.emit("error", new Error("setThermMode 'options' not set."));
+    return this;
+  }
+
+  if (!options.home_id) {
+    this.emit("error", new Error("setThermMode 'home_id' not set."));
+    return this;
+  }
+
+  var url = util.format('%s/api/setthermmode', BASE_URL);
+
+  var form = {
+    access_token: access_token,
+    home_id: options.home_id,
+    mode: options.mode,
+  };
+
+  if (options) {
+    if (options.endtime) {
+      form.endtime = options.endtime;
+    }
+  }
+ 
+  request({
+    url: url,
+    method: "POST",
+    form: form,
+  }, function (err, response, body) {
+    if (err || response.statusCode != 200) {
+      return this.handleRequestError(err, response, body, "setThermMode error");
+    }
+
+    body = JSON.parse(body);
+
+    this.emit('get-setthermmode', err, body);
+
+    if (callback) {
+      return callback(err, body);
+    }
+
+    return this;
+
+  }.bind(this));
+
+  return this;
+};
+
+/**
+ * https://dev.netatmo.com/resources/technical/reference/energy/setroomthermpoint
+ * @param options
+ * @param callback
+ * @returns {*}
+ */
+netatmo.prototype.setRoomThermPoint = function (options, callback) {
+  // Wait until authenticated.
+  if (!access_token) {
+    return this.on('authenticated', function () {
+      this.setRoomThermPoint(options, callback);
+    });
+  }
+
+  if (!options) {
+    this.emit("error", new Error("setRoomThermPoint 'options' not set."));
+    return this;
+  }
+
+  if (!options.home_id) {
+    this.emit("error", new Error("setRoomThermPoint 'home_id' not set."));
+    return this;
+  }
+
+  var url = util.format('%s/api/setroomthermpoint', BASE_URL);
+
+  var form = {
+    access_token: access_token,
+    home_id: options.home_id,
+    room_id: options.room_id,
+    mode: options.mode,
+  };
+
+  if (options) {
+    if (options.temp) {
+      form.temp = options.temp;
+    }
+    if (options.endtime) {
+      form.endtime = options.endtime;
+    }
+  }
+ 
+  request({
+    url: url,
+    method: "POST",
+    form: form,
+  }, function (err, response, body) {
+    if (err || response.statusCode != 200) {
+      return this.handleRequestError(err, response, body, "setRoomThermPoint error");
+    }
+
+    body = JSON.parse(body);
+
+    this.emit('get-setroomthermpoint', err, body);
+
+    if (callback) {
+      return callback(err, body);
+    }
+
+    return this;
+
+  }.bind(this));
+
+  return this;
+};
+
 module.exports = netatmo;
