@@ -11,9 +11,10 @@ var client_id;
 var client_secret;
 var scope;
 var access_token;
+var timeout;
 
 /**
- * @constructor
+ * @constructor 
  * @param args
  */
 var netatmo = function (args) {
@@ -93,6 +94,7 @@ netatmo.prototype.authenticate = function (args, callback) {
   password = args.password;
   client_id = args.client_id;
   client_secret = args.client_secret;
+  timeout = args.timeout;
   scope = args.scope || 'read_station read_thermostat write_thermostat read_camera read_homecoach';
 
   var form = {
@@ -110,9 +112,14 @@ netatmo.prototype.authenticate = function (args, callback) {
     url: url,
     method: "POST",
     form: form,
+    timeout: timeout
   }, function (err, response, body) {
     if (err || response.statusCode != 200) {
-      return this.handleRequestError(err, response, body, "Authenticate error", true);
+      var error = this.handleRequestError(err, response, body, "Authenticate error");
+      if (callback) {
+        callback(error);
+      }
+      return error;
     }
 
     body = JSON.parse(body);
@@ -155,6 +162,7 @@ netatmo.prototype.authenticate_refresh = function (refresh_token) {
     url: url,
     method: "POST",
     form: form,
+    timeout: timeout
   }, function (err, response, body) {
     if (err || response.statusCode != 200) {
       return this.handleRequestError(err, response, body, "Authenticate refresh error");
@@ -212,9 +220,14 @@ netatmo.prototype.getStationsData = function (options, callback) {
     url: url,
     method: "POST",
     form: form,
+    timeout: options && options.timeout || timeout
   }, function (err, response, body) {
     if (err || response.statusCode != 200) {
-      return this.handleRequestError(err, response, body, "getStationsDataError error");
+      var error = this.handleRequestError(err, response, body, "getStationsData error");
+      if (callback) {
+        callback(error);
+      }
+      return error;
     }
 
     body = JSON.parse(body);
@@ -261,9 +274,14 @@ netatmo.prototype.getThermostatsData = function (options, callback) {
   request({
     url: url,
     method: "GET",
+    timeout: options && options.timeout || timeout
   }, function (err, response, body) {
     if (err || response.statusCode != 200) {
-      return this.handleRequestError(err, response, body, "getThermostatsDataError error");
+      var error = this.handleRequestError(err, response, body, "getThermostatsData error");
+      if (callback) {
+        callback(error);
+      }
+      return error;
     }
 
     body = JSON.parse(body);
@@ -378,13 +396,14 @@ netatmo.prototype.getMeasure = function (options, callback) {
     url: url,
     method: "POST",
     form: form,
+    timeout: options && options.timeout || timeout
   }, function (err, response, body) {
     if (err || response.statusCode != 200) {
       var error = this.handleRequestError(err, response, body, "getMeasure error");
       if (callback) {
         callback(error);
       }
-      return;
+      return error;
     }
 
     body = JSON.parse(body);
@@ -457,9 +476,14 @@ netatmo.prototype.setSyncSchedule = function (options, callback) {
     url: url,
     method: "POST",
     form: form,
+    timeout: options && options.timeout || timeout
   }, function (err, response, body) {
     if (err || response.statusCode != 200) {
-      return this.handleRequestError(err, response, body, "setSyncSchedule error");
+      var error = this.handleRequestError(err, response, body, "setSyncSchedule error");
+      if (callback) {
+        callback(error);
+      }
+      return error;
     }
 
     body = JSON.parse(body);
@@ -536,9 +560,14 @@ netatmo.prototype.setThermpoint = function (options, callback) {
     url: url,
     method: "POST",
     form: form,
+    timeout: options && options.timeout || timeout
   }, function (err, response, body) {
     if (err || response.statusCode != 200) {
-      return this.handleRequestError(err, response, body, "setThermpoint error");
+      var error = this.handleRequestError(err, response, body, "setThermpoint error");
+      if (callback) {
+        callback(error);
+      }
+      return error;
     }
 
     body = JSON.parse(body);
@@ -594,9 +623,14 @@ netatmo.prototype.getHomeData = function (options, callback) {
     url: url,
     method: "POST",
     form: form,
+    timeout: options && options.timeout || timeout
   }, function (err, response, body) {
     if (err || response.statusCode != 200) {
-      return this.handleRequestError(err, response, body, "getHomeData error");
+      var error = this.handleRequestError(err, response, body, "getHomeData error");
+      if (callback) {
+        callback(error);
+      }
+      return error;
     }
 
     body = JSON.parse(body);
@@ -772,9 +806,14 @@ netatmo.prototype.getNextEvents = function (options, callback) {
     url: url,
     method: "POST",
     form: form,
+    timeout: options && options.timeout || timeout
   }, function (err, response, body) {
     if (err || response.statusCode != 200) {
-      return this.handleRequestError(err, response, body, "getNextEvents error");
+      var error = this.handleRequestError(err, response, body, "getNextEvents error");
+      if (callback) {
+        callback(error);
+      }
+      return error;
     }
 
     body = JSON.parse(body);
@@ -837,9 +876,14 @@ netatmo.prototype.getLastEventOf = function (options, callback) {
     url: url,
     method: "POST",
     form: form,
+    timeout: options && options.timeout || timeout
   }, function (err, response, body) {
     if (err || response.statusCode != 200) {
-      return this.handleRequestError(err, response, body, "getLastEventOf error");
+      var error = this.handleRequestError(err, response, body, "getLastEventOf error");
+      if (callback) {
+        callback(error);
+      }
+      return error;
     }
 
     body = JSON.parse(body);
@@ -898,9 +942,14 @@ netatmo.prototype.getEventsUntil = function (options, callback) {
     url: url,
     method: "POST",
     form: form,
+    timeout: options && options.timeout || timeout
   }, function (err, response, body) {
     if (err || response.statusCode != 200) {
-      return this.handleRequestError(err, response, body, "getEventsUntil error");
+      var error = this.handleRequestError(err, response, body, "getEventsUntil error");
+      if (callback) {
+        callback(error);
+      }
+      return error;
     }
 
     body = JSON.parse(body);
@@ -960,10 +1009,15 @@ netatmo.prototype.getCameraPicture = function (options, callback) {
     method: "GET",
     qs: qs,
     encoding: null,
-    contentType: 'image/jpg'
+    contentType: 'image/jpg',
+    timeout: options && options.timeout || timeout
   }, function (err, response, body) {
     if (err || response.statusCode != 200) {
-      return this.handleRequestError(err, response, body, "getCameraPicture error");
+      var error = this.handleRequestError(err, response, body, "getCameraPicture error");
+      if (callback) {
+        callback(error);
+      }
+      return error;
     }
 
     this.emit('get-camerapicture', err, body);
@@ -1006,9 +1060,14 @@ netatmo.prototype.getHealthyHomeCoachData = function (options, callback) {
   request({
     url: url,
     method: "GET",
+    timeout: options && options.timeout || timeout
   }, function (err, response, body) {
     if (err || response.statusCode != 200) {
-      return this.handleRequestError(err, response, body, "getHealthyHomeCoachData error");
+      var error = this.handleRequestError(err, response, body, "getHealthyHomeCoachData error");
+      if (callback) {
+        callback(error);
+      }
+      return error;
     }
 
     body = JSON.parse(body);
