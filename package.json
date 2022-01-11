@@ -24,7 +24,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "moment": "^2.22.2",
-    "request": "^2.85.0"
+    "moment": "^2.29.1",
+    "node-fetch": "^2.6.6"
   }
 }
