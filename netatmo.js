@@ -93,7 +93,7 @@ netatmo.prototype.authenticate = function (args, callback) {
   password = args.password;
   client_id = args.client_id;
   client_secret = args.client_secret;
-  scope = args.scope || 'read_station read_thermostat write_thermostat read_camera write_camera access_camera read_presence access_presence read_homecoach';
+  scope = args.scope || 'read_station read_thermostat write_thermostat read_camera write_camera access_camera read_presence access_presence read_smokedetector read_homecoach';
 
   var form = {
     client_id: client_id,
