@@ -469,20 +469,25 @@ netatmo.prototype.getRoomMeasure = function (options, callback) {
   if (options) {
 
     if (options.date_begin) {
-      if (options.date_begin <= 1E10) {
-        options.date_begin *= 1E3;
+      options.date_begin = parseInt(options.date_begin, 10);
+
+      if (options.date_begin >= 1e10) {
+        options.date_begin /= 1e3;
       }
 
-      form.date_begin = moment(options.date_begin).utc().unix();
+      form.date_begin = options.date_begin;
     }
 
     if (options.date_end === 'last') {
       form.date_end = 'last';
     } else if (options.date_end) {
-      if (options.date_end <= 1E10) {
-        options.date_end *= 1E3;
+      options.date_end = parseInt(options.date_end, 10);
+
+      if (options.date_end >= 1e10) {
+        options.date_end /= 1e3;
       }
-      form.date_end = moment(options.date_end).utc().unix();
+
+      form.date_end = options.date_end;
     }
 
     if (options.limit) {
@@ -1339,7 +1344,7 @@ netatmo.prototype.homeStatus = function (options, callback) {
       form.device_types = options.device_types;
     }
   }
- 
+
   request({
     url: url,
     method: "POST",
@@ -1401,7 +1406,7 @@ netatmo.prototype.setThermMode = function (options, callback) {
       form.endtime = options.endtime;
     }
   }
- 
+
   request({
     url: url,
     method: "POST",
@@ -1467,7 +1472,7 @@ netatmo.prototype.setRoomThermPoint = function (options, callback) {
       form.endtime = options.endtime;
     }
   }
- 
+
   request({
     url: url,
     method: "POST",
