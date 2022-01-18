@@ -4,7 +4,7 @@ const process = require('process');
 const test = require('ava');
 const netatmo = require('../netatmo');
 // eslint-disable-next-line ava/no-import-test-files
-const {getCredentials} = require('./credentials');
+const { getCredentials, getWeatherDeviceId } = require('./credentials');
 
 // @ts-ignore
 // test produces a "Uncaught exception in test.js" 
@@ -66,6 +66,7 @@ test.serial('homesData without home_id', t => {
     return apiCallAsync(t.context.api, t.context.api.homesData).then(result => {
         t.assert(result);
         t.assert(Array.isArray(result.homes));
+        // console.log(result.homes[0].modules);
     }).catch(error => { t.is(error, ''); });
 });
 
@@ -75,6 +76,28 @@ test.serial('homesData with invalid home_id', t => {
         t.assert(result);
         t.assert(Array.isArray(result.homes));
     }).catch(error => { t.is(error, 'homesData error: Forbidden access to home'); });
+});
+
+// @ts-ignore
+test.serial('getMeasure without device_id', t => {
+    return apiCallAsync(t.context.api, t.context.api.getMeasure, {}).then(result => {
+        t.assert(result);
+        t.assert(Array.isArray(result.homes));
+    }).catch(error => { t.is(error, 'getMeasure \'device_id\' not set.'); });
+});
+
+// @ts-ignore
+test.serial('getMeasure with scale max and complete type array', t => {
+    const options = {
+        device_id: getWeatherDeviceId(),
+        scale: 'max',
+        type: ['Temperature', 'CO2', 'Humidity', 'Pressure', 'Noise'],
+    };
+    return apiCallAsync(t.context.api, t.context.api.getMeasure, options).then(result => {
+        // console.log(result);
+        t.assert(result);
+        t.assert(Array.isArray(result));
+    }).catch(error => { t.is(error, ''); });
 });
 
 // @ts-ignore
