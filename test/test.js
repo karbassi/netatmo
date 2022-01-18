@@ -3,6 +3,8 @@
 const process = require('process');
 const test = require('ava');
 const netatmo = require('../netatmo');
+// eslint-disable-next-line ava/no-import-test-files
+const {getCredentials} = require('./credentials');
 
 // @ts-ignore
 // test produces a "Uncaught exception in test.js" 
@@ -24,13 +26,7 @@ test.serial.before('try authenticate without credentials', async t => {
 // @ts-ignore
 // beforeEach or test.serial is required, two concurrent calls to netatmo are not possible!
 test.before('authenticate', t => {
-    const auth = {
-        "client_id": "myClientId", // your credentials here!
-        "client_secret": "myClientSecret",
-        "username": "myEmail",
-        "password": "myPassord",
-    };
-
+    const auth = getCredentials();
     t.context.api = new netatmo(auth);
     t.assert(t.context.api);
 });
