@@ -256,6 +256,18 @@ if (getTestParameters().homeId) {
     });
 }
 
+if (getTestParameters().aircareDeviceId) {
+    // @ts-ignore
+    test.serial('getHealthyHomeCoachData with Aircare Device', t => {
+        const options = {
+            device_id: getTestParameters().aircareDeviceId,
+        };
+        return apiCallAsync(t.context.api, t.context.api.getHealthyHomeCoachData, options).then(() => {
+            t.fail();
+        }).catch(error => { t.is(error, 'getHealthyHomeCoachData error: Device not found'); });
+    });
+}
+
 // @ts-ignore
 test.serial('getPublicData with Invalid coordinates and rain', t => {
     return apiCallAsync(t.context.api, t.context.api.getPublicData, { lat_ne: 1, lon_ne: 2, lat_sw: 3, lon_sw: 4, required_data: ['rain'] }).then(() => {
