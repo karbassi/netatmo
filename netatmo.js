@@ -53,7 +53,7 @@ netatmo.prototype.handleRequestError = function (err, response, body, message, c
 };
 
 /**
- * https://dev.netatmo.com/dev/resources/technical/guides/authentication
+ * @description https://dev.netatmo.com/apidocumentation/oauth
  * @param args
  * @param callback
  * @returns {netatmo}
@@ -120,6 +120,7 @@ netatmo.prototype.authenticate = function (args, callback) {
     access_token = body.access_token;
 
     if (body.expires_in) {
+      // eslint-disable-next-line no-undef
       setTimeout(this.authenticate_refresh.bind(this), body.expires_in * 1000, body.refresh_token);
     }
 
@@ -136,7 +137,7 @@ netatmo.prototype.authenticate = function (args, callback) {
 };
 
 /**
- * https://dev.netatmo.com/dev/resources/technical/guides/authentication/refreshingatoken
+ * @description https://dev.netatmo.com/apidocumentation/oauth
  * @param refresh_token
  * @returns {netatmo}
  */
@@ -165,6 +166,7 @@ netatmo.prototype.authenticate_refresh = function (refresh_token) {
     access_token = body.access_token;
 
     if (body.expires_in) {
+      // eslint-disable-next-line no-undef
       setTimeout(this.authenticate_refresh.bind(this), body.expires_in * 1000, body.refresh_token);
     }
 
@@ -175,7 +177,7 @@ netatmo.prototype.authenticate_refresh = function (refresh_token) {
 };
 
 /**
- * https://dev.netatmo.com/dev/resources/technical/reference/weatherstation/getstationsdata
+ * @description https://dev.netatmo.com/apidocumentation/weather#getstationsdata
  * @param options
  * @param callback
  * @returns {*}
@@ -238,6 +240,7 @@ netatmo.prototype.getStationsData = function (options, callback) {
  * https://dev.netatmo.com/dev/resources/technical/reference/thermostat/getthermostatsdata
  * @param options
  * @param callback
+ * @deprecated by netatmo
  * @returns {*}
  */
 netatmo.prototype.getThermostatsData = function (options, callback) {
@@ -284,7 +287,7 @@ netatmo.prototype.getThermostatsData = function (options, callback) {
 };
 
 /**
- * https://dev.netatmo.com/dev/resources/technical/reference/common/getmeasure
+ * @deprecated https://dev.netatmo.com/apidocumentation/weather#getmeasure
  * @param options
  * @param callback
  * @returns {*}
@@ -408,6 +411,7 @@ netatmo.prototype.getMeasure = function (options, callback) {
  * https://dev.netatmo.com/dev/resources/technical/reference/common/getroommeasure
  * @param options
  * @param callback
+ * @deprecated by netatmo
  * @returns {*}
  */
 netatmo.prototype.getRoomMeasure = function (options, callback) {
@@ -531,6 +535,7 @@ netatmo.prototype.getRoomMeasure = function (options, callback) {
  * https://dev.netatmo.com/dev/resources/technical/reference/thermostat/syncschedule
  * @param options
  * @param callback
+ * @deprecated by netatmo
  * @returns {*}
  */
 netatmo.prototype.setSyncSchedule = function (options, callback) {
@@ -604,6 +609,7 @@ netatmo.prototype.setSyncSchedule = function (options, callback) {
  * https://dev.netatmo.com/dev/resources/technical/reference/thermostat/setthermpoint
  * @param options
  * @param callback
+ * @deprecated by netatmo
  * @returns {*}
  */
 netatmo.prototype.setThermpoint = function (options, callback) {
@@ -683,6 +689,7 @@ netatmo.prototype.setThermpoint = function (options, callback) {
  * https://dev.netatmo.com/dev/resources/technical/reference/welcome/gethomedata
  * @param options
  * @param callback
+ * @deprecated by netatmo
  * @returns {*}
  */
 netatmo.prototype.getHomeData = function (options, callback) {
@@ -738,7 +745,7 @@ netatmo.prototype.getHomeData = function (options, callback) {
 };
 
 /**
- * https://dev.netatmo.com/resources/technical/reference/energy/homesdata
+ * @description https://dev.netatmo.com/apidocumentation/energy#homesdata
  * @param options
  * @param callback
  * @returns {*}
@@ -792,7 +799,7 @@ netatmo.prototype.getHomesData = function (options, callback) {
 };
 
 /**
- * https://dev.netatmo.com/resources/technical/reference/energy/homestatus
+ * @description https://dev.netatmo.com/apidocumentation/energy#homestatus
  * @param options
  * @param callback
  * @returns {*}
@@ -851,9 +858,10 @@ netatmo.prototype.getHomeStatus = function (options, callback) {
 };
 
 /**
- * https://dev.netatmo.com/dev/resources/technical/reference/welcome/getnextevents
+ * https://dev.netatmo.com/apidocumentation/security#getnextevents
  * @param options
  * @param callback
+ * @deprecated by netatmo. Now use `Getevents`
  * @returns {*}
  */
 netatmo.prototype.getNextEvents = function (options, callback) {
@@ -916,9 +924,10 @@ netatmo.prototype.getNextEvents = function (options, callback) {
 };
 
 /**
- * https://dev.netatmo.com/dev/resources/technical/reference/welcome/getlasteventof
+ * https://dev.netatmo.com/apidocumentation/security#getlasteventof
  * @param options
  * @param callback
+ * @deprecated by netatmo. Now use `Getevents`
  * @returns {*}
  */
 netatmo.prototype.getLastEventOf = function (options, callback) {
@@ -981,9 +990,10 @@ netatmo.prototype.getLastEventOf = function (options, callback) {
 };
 
 /**
- * https://dev.netatmo.com/dev/resources/technical/reference/welcome/geteventsuntil
+ * https://dev.netatmo.com/apidocumentation/security#geteventsuntil
  * @param options
  * @param callback
+ * @deprecated by netatmo. Now use `Getevents`
  * @returns {*}
  */
 netatmo.prototype.getEventsUntil = function (options, callback) {
@@ -1042,9 +1052,10 @@ netatmo.prototype.getEventsUntil = function (options, callback) {
 };
 
 /**
- * https://dev.netatmo.com/dev/resources/technical/reference/welcome/getcamerapicture
+ * https://dev.netatmo.com/apidocumentation/security#getcamerapicture
  * @param options
  * @param callback
+ * @deprecated by netatmo. Snapshots are now retrievable in the event object directly, use `Getevents`
  * @returns {*}
  */
 netatmo.prototype.getCameraPicture = function (options, callback) {
@@ -1103,7 +1114,7 @@ netatmo.prototype.getCameraPicture = function (options, callback) {
 };
 
 /**
- * https://dev.netatmo.com/dev/resources/technical/reference/healthyhomecoach/gethomecoachsdata
+ * @description https://dev.netatmo.com/apidocumentation/aircare#gethomecoachsdata
  * @param options
  * @param callback
  * @returns {*}
@@ -1152,7 +1163,7 @@ netatmo.prototype.getHealthyHomeCoachData = function (options, callback) {
 };
 
 /**
- * https://dev.netatmo.com/resources/technical/reference/weatherapi/getpublicdata
+ * @description https://dev.netatmo.com/apidocumentation/weather#getpublicdata
  * @param options
  * @param callback
  * @returns {*}
@@ -1241,7 +1252,7 @@ netatmo.prototype.getPublicData = function (options, callback) {
 };
 
 /**
- * https://dev.netatmo.com/resources/technical/reference/energy/homesdata
+ * @description https://dev.netatmo.com/apidocumentation/energy#homesdata
  * @param options
  * @param callback
  * @returns {*}
@@ -1299,7 +1310,7 @@ netatmo.prototype.homesData = function (options, callback) {
 };
 
 /**
- * https://dev.netatmo.com/resources/technical/reference/energy/homesdata
+ * @description https://dev.netatmo.com/apidocumentation/energy#homestatus
  * @param options
  * @param callback
  * @returns {*}
@@ -1326,7 +1337,7 @@ netatmo.prototype.homeStatus = function (options, callback) {
 
   var form = {
     access_token: access_token,
-	  home_id: options.home_id,
+    home_id: options.home_id,
   };
 
   if (options) {
@@ -1360,7 +1371,7 @@ netatmo.prototype.homeStatus = function (options, callback) {
 };
 
 /**
- * https://dev.netatmo.com/resources/technical/reference/energy/setthermmode
+ * @description https://dev.netatmo.com/apidocumentation/energy#setthermmode
  * @param options
  * @param callback
  * @returns {*}
@@ -1422,7 +1433,7 @@ netatmo.prototype.setThermMode = function (options, callback) {
 };
 
 /**
- * https://dev.netatmo.com/resources/technical/reference/energy/setroomthermpoint
+ * @description https://dev.netatmo.com/apidocumentation/energy#setroomthermpoint
  * @param options
  * @param callback
  * @returns {*}
@@ -1488,7 +1499,7 @@ netatmo.prototype.setRoomThermPoint = function (options, callback) {
 };
 
 /**
- * https://dev.netatmo.com/apidocumentation/security#setpersonsaway
+ * @description https://dev.netatmo.com/apidocumentation/security#setpersonsaway
  * @param options
  * @param callback
  * @returns {*}

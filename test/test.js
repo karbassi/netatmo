@@ -45,6 +45,11 @@ test.before('authenticate', t => {
 function apiCallAsync(api, func, options = null) {
     return new Promise(function (resolve, reject) {
         function errorWarningHandler(error) {
+            process.removeListener('uncaughtException', uncaughtExceptionHandler);
+            // @ts-ignore
+            api.removeListener('error', errorWarningHandler);
+            // @ts-ignore
+            api.removeListener('warning', errorWarningHandler);
             reject(error.message);
         }
         // @ts-ignore
@@ -53,6 +58,11 @@ function apiCallAsync(api, func, options = null) {
         api.on("warning", errorWarningHandler);
 
         function uncaughtExceptionHandler(reason) {
+            process.removeListener('uncaughtException', uncaughtExceptionHandler);
+            // @ts-ignore
+            api.removeListener('error', errorWarningHandler);
+            // @ts-ignore
+            api.removeListener('warning', errorWarningHandler);
             reject(reason.message);
         }
         // @ts-ignore
@@ -247,11 +257,92 @@ test.serial('homeStatus without options', t => {
 if (getTestParameters().homeId) {
     // @ts-ignore
     test.serial('homeStatus with home_id', t => {
-        return apiCallAsync(t.context.api, t.context.api.homeStatus, {home_id: getTestParameters().homeId}).then(result => {
+        return apiCallAsync(t.context.api, t.context.api.homeStatus, { home_id: getTestParameters().homeId }).then(result => {
             t.assert(result);
             t.assert(result.home);
             t.assert(result.home.id);
             // console.log(result.home);
+        }).catch(() => { t.fail(); });
+    });
+}
+
+if (getTestParameters().homeId) {
+    // @ts-ignore
+    test.serial('setThermMode with home_id', t => {
+        const options = {
+            home_id: getTestParameters().homeId,
+            mode: 'schedule',
+        };
+        return apiCallAsync(t.context.api, t.context.api.setThermMode, options).then(result => {
+            t.assert(result);
+            t.is(result.status, 'ok');
+        }).catch(() => { t.fail(); });
+    });
+}
+
+if (getTestParameters().homeId) {
+    // @ts-ignore
+    test.serial('setRoomThermPoint with home_id', t => {
+        const options = {
+            home_id: getTestParameters().homeId,
+        };
+        return apiCallAsync(t.context.api, t.context.api.setRoomThermPoint, options).then(() => {
+            t.fail();
+        }).catch((error) => { t.is(error,'setRoomThermPoint error: Missing parameters'); });
+    });
+}
+
+if (getTestParameters().homeId && getTestParameters().roomId) {
+    // @ts-ignore
+    test.serial('setRoomThermPoint with home_id and room_id', t => {
+        const options = {
+            home_id: getTestParameters().homeId,
+            room_id: getTestParameters().roomId,
+        };
+        return apiCallAsync(t.context.api, t.context.api.setRoomThermPoint, options).then(() => {
+            t.fail();
+        }).catch((error) => { t.is(error,'setRoomThermPoint error: Missing parameters'); });
+    });
+}
+
+if (getTestParameters().homeId && getTestParameters().roomId) {
+    // @ts-ignore
+    test.serial('setRoomThermPoint with home_id and room_id and mode', t => {
+        const options = {
+            home_id: getTestParameters().homeId,
+            room_id: getTestParameters().roomId,
+            mode: 'home',
+        };
+        return apiCallAsync(t.context.api, t.context.api.setRoomThermPoint, options).then((result) => {
+            t.assert(result);
+            t.is(result.status, 'ok');
+        }).catch(() => { t.fail(); });
+    });
+}
+
+if (getTestParameters().homeId) {
+    // @ts-ignore
+    test.serial('setPersonAway with home_id and invalid person_id', t => {
+        const options = {
+            home_id: getTestParameters().homeId,
+            person_id: 'xxx',
+        };
+        return apiCallAsync(t.context.api, t.context.api.setPersonAway, options).then(() => {
+            t.fail();
+        }).catch(error => { t.is(error,'setPersonAway error: Invalid person'); });
+    });
+}
+
+if (getTestParameters().homeId) {
+    // @ts-ignore
+    test.serial('setPersonAway with home_id and empty person_id', t => {
+        const options = {
+            home_id: getTestParameters().homeId,
+            person_id: '',
+        };
+        return apiCallAsync(t.context.api, t.context.api.setPersonAway, options).then(result => {
+            t.assert(result);
+            t.is(result.status, 'ok');
         }).catch(() => { t.fail(); });
     });
 }
