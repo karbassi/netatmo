@@ -36,7 +36,10 @@ test.before('authenticate', t => {
  * @param {netatmo} api
  * @param {function} func
  * @param {*} [options=null]
- * @return {Promise}
+ * @promise fPromise
+ * @reject {string}
+ * @fulfill {Object}
+ * @returns {Promise.<Object,string>}
  */
 
 function apiCallAsync(api, func, options = null) {
@@ -71,17 +74,16 @@ function apiCallAsync(api, func, options = null) {
 // @ts-ignore
 test.serial('homesData without home_id', t => {
     return apiCallAsync(t.context.api, t.context.api.homesData).then(result => {
+        // console.log(result.homes);
         t.assert(result);
         t.assert(Array.isArray(result.homes));
-        // console.log(result.homes[1].modules);
-    }).catch(error => { t.is(error, ''); });
+    }).catch(() => { t.fail(); });
 });
 
 // @ts-ignore
 test.serial('homesData with invalid home_id', t => {
-    return apiCallAsync(t.context.api, t.context.api.homesData, { home_id: 1 }).then(result => {
-        t.assert(result);
-        t.assert(Array.isArray(result.homes));
+    return apiCallAsync(t.context.api, t.context.api.homesData, { home_id: 1 }).then(() => {
+        t.fail();
     }).catch(error => { t.is(error, 'homesData error: Forbidden access to home'); });
 });
 
@@ -91,7 +93,7 @@ test.serial('getStationsData without device_id', t => {
         // console.log(result);
         t.assert(result);
         t.assert(Array.isArray(result));
-    }).catch(error => { t.is(error, ''); });
+    }).catch(() => { t.fail(); });
 });
 
 if (getTestParameters().weatherDeviceId) {
@@ -104,7 +106,7 @@ if (getTestParameters().weatherDeviceId) {
             t.assert(result);
             t.assert(Array.isArray(result));
             t.regex(result[0]._id, regexMacAddr, "[0]._id is not a mac address")
-        }).catch(error => { t.is(error, ''); });
+        }).catch(() => { t.fail(); });
     });
 }
 
@@ -119,15 +121,14 @@ if (getTestParameters().weatherDeviceId) {
             t.assert(result);
             t.assert(Array.isArray(result));
             t.regex(result[0]._id, regexMacAddr, "[0]._id is not a mac address")
-        }).catch(error => { t.is(error, ''); });
+        }).catch(() => { t.fail(); });
     });
 }
 
 // @ts-ignore
 test.serial('getMeasure without device_id', t => {
-    return apiCallAsync(t.context.api, t.context.api.getMeasure, {}).then(result => {
-        t.assert(result);
-        t.assert(Array.isArray(result.homes));
+    return apiCallAsync(t.context.api, t.context.api.getMeasure, {}).then(() => {
+        t.fail();
     }).catch(error => { t.is(error, 'getMeasure \'device_id\' not set.'); });
 });
 
@@ -145,7 +146,7 @@ if (getTestParameters().weatherDeviceId) {
             t.assert(result);
             t.assert(Array.isArray(result));
             t.assert(result[0].beg_time);
-        }).catch(error => { t.is(error, ''); });
+        }).catch(() => { t.fail(); });
     });
 }
 
@@ -155,21 +156,19 @@ if (getTestParameters().weatherDeviceId) {
         const options = {
             device_id: getTestParameters().weatherDeviceId,
         };
-        return apiCallAsync(t.context.api, t.context.api.getThermostatsData, options).then(result => {
-            // console.log(result);
-            t.assert(result);
-            t.assert(Array.isArray(result));
+        return apiCallAsync(t.context.api, t.context.api.getThermostatsData, options).then(() => {
+            t.fail();
         }).catch(error => { t.is(error, 'getThermostatsDataError error: Device not found'); });
     });
 }
 
 /*
 device_id type is unknown function is deprecated by netatmo
-if (getTestParameters().getEnergyRelayDeviceId) {
+if (getTestParameters().energyRelayDeviceId) {
     // @ts-ignore
     test.serial('getThermostatsData with EnergyRelayDevice Device', t => {
         const options = {
-            device_id: getTestParameters().getEnergyRelayDeviceId,
+            device_id: getTestParameters().energyRelayDeviceId,
         };
         return apiCallAsync(t.context.api, t.context.api.getThermostatsData, options).then(result => {
             // console.log(result);
@@ -181,12 +180,90 @@ if (getTestParameters().getEnergyRelayDeviceId) {
 */
 
 // @ts-ignore
+test.serial('getRoomMeasure without home_id', t => {
+    return apiCallAsync(t.context.api, t.context.api.getRoomMeasure, {}).then(() => {
+        t.fail();
+    }).catch(error => { t.is(error, 'getRoomMeasure \'home_id\' not set.'); });
+});
+
+if (getTestParameters().homeId) {
+    // @ts-ignore
+    test.serial('getRoomMeasure with home_id', t => {
+        return apiCallAsync(t.context.api, t.context.api.getRoomMeasure, { home_id: getTestParameters().homeId }).then(() => {
+            t.fail();
+        }).catch(error => { t.is(error, 'getRoomMeasure \'room_id\' not set.'); });
+    });
+}
+
+if (getTestParameters().homeId && getTestParameters().roomId) {
+    // @ts-ignore
+    test.serial('getRoomMeasure with home_id and room_id', t => {
+        const options = {
+            home_id: getTestParameters().homeId,
+            room_id: getTestParameters().roomId,
+        };
+        return apiCallAsync(t.context.api, t.context.api.getRoomMeasure, options).then(() => {
+            t.fail();
+        }).catch(error => { t.is(error, 'getRoomMeasure \'scale\' not set.'); });
+    });
+}
+
+if (getTestParameters().homeId && getTestParameters().roomId) {
+    // @ts-ignore
+    test.serial('getRoomMeasure with home_id and room_id and scale', t => {
+        const options = {
+            home_id: getTestParameters().homeId,
+            room_id: getTestParameters().roomId,
+            scale: 'xxx'
+        };
+        return apiCallAsync(t.context.api, t.context.api.getRoomMeasure, options).then(() => {
+            t.fail();
+        }).catch(error => { t.is(error, 'getRoomMeasure \'type\' not set.'); });
+    });
+}
+
+if (getTestParameters().homeId && getTestParameters().roomId) {
+    // @ts-ignore
+    test.serial('getRoomMeasure with home_id and room_id and scale and type', t => {
+        const options = {
+            home_id: getTestParameters().homeId,
+            room_id: getTestParameters().roomId,
+            scale: 'xxx',
+            type: 'xxx',
+        };
+        return apiCallAsync(t.context.api, t.context.api.getRoomMeasure, options).then(() => {
+            t.fail();
+        }).catch(error => { t.is(error, 'getRoomMeasure error: Unknown scale'); });
+    });
+}
+
+// @ts-ignore
+test.serial('homeStatus without options', t => {
+    return apiCallAsync(t.context.api, t.context.api.homeStatus).then(() => {
+        t.fail();
+    }).catch(error => { t.is(error, 'homeStatus \'options\' not set.'); });
+});
+
+if (getTestParameters().homeId) {
+    // @ts-ignore
+    test.serial('homeStatus with home_id', t => {
+        return apiCallAsync(t.context.api, t.context.api.homeStatus, {home_id: getTestParameters().homeId}).then(result => {
+            t.assert(result);
+            t.assert(result.home);
+            t.assert(result.home.id);
+            // console.log(result.home);
+        }).catch(() => { t.fail(); });
+    });
+}
+
+// @ts-ignore
 test.serial('getPublicData with Invalid coordinates and rain', t => {
-    return apiCallAsync(t.context.api, t.context.api.getPublicData, { lat_ne: 1, lon_ne: 2, lat_sw: 3, lon_sw: 4, required_data: ['rain'] }).then(result => {
-        t.assert(result);
-        t.assert(Array.isArray(result.homes));
+    return apiCallAsync(t.context.api, t.context.api.getPublicData, { lat_ne: 1, lon_ne: 2, lat_sw: 3, lon_sw: 4, required_data: ['rain'] }).then(() => {
+        t.fail();
     }).catch(error => { t.is(error, 'getPublicData error: Invalid coordinates given'); });
 });
+
+// Lese eine öffentliche Station
 
 // @ts-ignore
 test.serial('getPublicData with coordinates and temperature', t => {
@@ -196,7 +273,7 @@ test.serial('getPublicData with coordinates and temperature', t => {
         t.assert(Array.isArray(result));
         t.regex(result[0]._id, regexMacAddr, "[0]._id is not a mac address")
         t.is(result[0]._id, '70:ee:50:3c:2c:ac'); // Dont worry, this id is public
-    }).catch(error => { t.is(error, ''); });
+    }).catch(() => { t.fail(); });
 });
 
 // @ts-ignore
@@ -206,6 +283,6 @@ test.serial.failing('getPublicData without required_data', t => {
     return apiCallAsync(t.context.api, t.context.api.getPublicData, { lat_ne: 39.6, lon_ne: 3.4, lat_sw: 39.5, lon_sw: 3.3 }).then(result => {
         t.assert(result);
         t.assert(Array.isArray(result.homes));
-    }).catch(error => { t.is(error, ''); });
+    }).catch(() => { t.fail(); });
 });
 

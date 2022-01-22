@@ -21,3 +21,4 @@ node_modules
 
 /.idea
 test/credentials.js
+.DS_Store
