@@ -1,11 +1,20 @@
+/**
+ * rename 'credentials.js.example' to 'credentials.js' and edit it to use our private credentials.
+ * start unit-tests with 'npm install' and 'npm test'.
+ */
+
 /* eslint-disable ava/prefer-async-await */
 //@ts-check
 const process = require('process');
 const test = require('ava');
 const netatmo = require('../netatmo');
-// eslint-disable-next-line ava/no-import-test-files
-const { getCredentials, getTestParameters } = require('./credentials');
+
 const regexMacAddr = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})|([0-9a-fA-F]{4}\\.[0-9a-fA-F]{4}\\.[0-9a-fA-F]{4})$/;
+
+// eslint-disable-next-line ava/no-import-test-files
+function getCredentials() { try { return (require('./credentials').getCredentials()); } catch (err) { return {}; } }
+// eslint-disable-next-line ava/no-import-test-files
+function getTestParameters() { try { return (require('./credentials').getTestParameters()); } catch (err) { return {}; } }
 
 // @ts-ignore
 // test produces a "Uncaught exception in test.js" 
@@ -288,7 +297,7 @@ if (getTestParameters().homeId) {
         };
         return apiCallAsync(t.context.api, t.context.api.setRoomThermPoint, options).then(() => {
             t.fail();
-        }).catch((error) => { t.is(error,'setRoomThermPoint error: Missing parameters'); });
+        }).catch((error) => { t.is(error, 'setRoomThermPoint error: Missing parameters'); });
     });
 }
 
@@ -301,7 +310,7 @@ if (getTestParameters().homeId && getTestParameters().roomId) {
         };
         return apiCallAsync(t.context.api, t.context.api.setRoomThermPoint, options).then(() => {
             t.fail();
-        }).catch((error) => { t.is(error,'setRoomThermPoint error: Missing parameters'); });
+        }).catch((error) => { t.is(error, 'setRoomThermPoint error: Missing parameters'); });
     });
 }
 
@@ -329,7 +338,7 @@ if (getTestParameters().homeId) {
         };
         return apiCallAsync(t.context.api, t.context.api.setPersonAway, options).then(() => {
             t.fail();
-        }).catch(error => { t.is(error,'setPersonAway error: Invalid person'); });
+        }).catch(error => { t.is(error, 'setPersonAway error: Invalid person'); });
     });
 }
 
