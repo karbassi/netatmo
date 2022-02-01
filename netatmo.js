@@ -11,7 +11,7 @@ var client_id;
 var client_secret;
 var scope;
 var access_token;
-
+var user_prefix; // 'velux' for velux active with netatmo devices
 /**
  * @constructor
  * @param args
@@ -93,6 +93,7 @@ netatmo.prototype.authenticate = function (args, callback) {
   password = args.password;
   client_id = args.client_id;
   client_secret = args.client_secret;
+  user_prefix = args.user_prefix;
   scope = args.scope || 'read_station read_thermostat write_thermostat read_camera write_camera access_camera read_presence access_presence read_smokedetector read_homecoach';
 
   var form = {
@@ -101,6 +102,7 @@ netatmo.prototype.authenticate = function (args, callback) {
     username: username,
     password: password,
     scope: scope,
+    user_prefix: user_prefix,
     grant_type: 'password',
   };
 

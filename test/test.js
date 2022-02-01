@@ -1,6 +1,7 @@
 /**
  * rename 'credentials.js.example' to 'credentials.js' and edit it to use our private credentials.
- * start unit-tests with 'npm install' and 'npm test'.
+ * start unit-tests with 'npm install' and 'npm test', verbose testing with 'npm test -- -- --v'
+ * To start a specific test use: npx ava --match='homesData*' or npx ava --match='homesData*' -- --v
  */
 
 /* eslint-disable ava/prefer-async-await */
@@ -16,9 +17,14 @@ function getCredentials() { try { return (require('./credentials').getCredential
 // eslint-disable-next-line ava/no-import-test-files
 function getTestParameters() { try { return (require('./credentials').getTestParameters()); } catch (err) { return {}; } }
 
+// Do extra logs...
+const verbose = process.argv && process.argv[2] === '-v';
+const velux = getCredentials() && getCredentials().user_prefix && getCredentials().user_prefix === "velux";
+
 // @ts-ignore
 // test produces a "Uncaught exception in test.js" 
 test.serial.before('try authenticate without credentials', async t => {
+    if (verbose) { t.log("Verbose output enabled"); }
     const auth = {
         "client_id": "",
         "client_secret": "",
@@ -93,11 +99,30 @@ function apiCallAsync(api, func, options = null) {
 // @ts-ignore
 test.serial('homesData without home_id', t => {
     return apiCallAsync(t.context.api, t.context.api.homesData).then(result => {
-        // console.log(result.homes);
         t.assert(result);
         t.assert(Array.isArray(result.homes));
+        if (verbose) { t.log(result.homes); }
+        t.assert(Array.isArray(result.homes[0].rooms));
+        if (verbose) { t.log(result.homes[0].rooms); }
     }).catch(() => { t.fail(); });
 });
+
+// Velux test with NGX
+// @ts-ignore
+test.serial('homesData without home_id and NXG', t => {
+    return apiCallAsync(t.context.api, t.context.api.homesData, { gateway_types: "NXG" }).then(result => {
+        t.assert(result);
+        t.assert(Array.isArray(result.homes));
+        if (verbose) { t.log(result.homes); }
+        t.assert(Array.isArray(result.homes[0].rooms));
+        if (verbose) { t.log(result.homes[0].rooms); }
+        t.assert(Array.isArray(result.homes[0].modules));
+        if (verbose) { t.log(result.homes[0].modules); }
+        t.assert(Array.isArray(result.homes[0].modules[0].capabilities));
+        if (verbose) { t.log(result.homes[0].modules[0].capabilities); }
+    }).catch(() => { t.fail(); });
+});
+
 
 // @ts-ignore
 test.serial('homesData with invalid home_id', t => {
@@ -106,42 +131,57 @@ test.serial('homesData with invalid home_id', t => {
     }).catch(error => { t.is(error, 'homesData error: Forbidden access to home'); });
 });
 
-// @ts-ignore
-test.serial('getStationsData without device_id', t => {
-    return apiCallAsync(t.context.api, t.context.api.getStationsData).then(result => {
-        // console.log(result);
-        t.assert(result);
-        t.assert(Array.isArray(result));
-    }).catch(() => { t.fail(); });
-});
-
-if (getTestParameters().weatherDeviceId) {
+if (getTestParameters().homeId) {
     // @ts-ignore
-    test.serial('getStationsData with device_id', t => {
-        const options = {
-            device_id: getTestParameters().weatherDeviceId,
-        };
-        return apiCallAsync(t.context.api, t.context.api.getStationsData, options).then(result => {
+    test.serial('homesData with home_id', t => {
+        return apiCallAsync(t.context.api, t.context.api.homesData, { home_id: getTestParameters().homeId }).then((result) => {
             t.assert(result);
-            t.assert(Array.isArray(result));
-            t.regex(result[0]._id, regexMacAddr, "[0]._id is not a mac address")
+            t.assert(Array.isArray(result.homes));
+            t.assert(Array.isArray(result.homes[0].rooms));
+            if (verbose) { t.log(result.homes); }
+            if (verbose) { t.log(result.homes[0].rooms); }
         }).catch(() => { t.fail(); });
     });
 }
 
-if (getTestParameters().weatherDeviceId) {
+if (!velux) {
     // @ts-ignore
-    test.serial('getStationsData with device_id and get_favorites', t => {
-        const options = {
-            device_id: getTestParameters().weatherDeviceId,
-            get_favorites: true,
-        };
-        return apiCallAsync(t.context.api, t.context.api.getStationsData, options).then(result => {
+    test.serial('getStationsData without device_id', t => {
+        return apiCallAsync(t.context.api, t.context.api.getStationsData).then(result => {
+            // console.log(result);
             t.assert(result);
             t.assert(Array.isArray(result));
-            t.regex(result[0]._id, regexMacAddr, "[0]._id is not a mac address")
         }).catch(() => { t.fail(); });
     });
+
+    if (getTestParameters().weatherDeviceId) {
+        // @ts-ignore
+        test.serial('getStationsData with device_id', t => {
+            const options = {
+                device_id: getTestParameters().weatherDeviceId,
+            };
+            return apiCallAsync(t.context.api, t.context.api.getStationsData, options).then(result => {
+                t.assert(result);
+                t.assert(Array.isArray(result));
+                t.regex(result[0]._id, regexMacAddr, "[0]._id is not a mac address")
+            }).catch(() => { t.fail(); });
+        });
+    }
+
+    if (getTestParameters().weatherDeviceId) {
+        // @ts-ignore
+        test.serial('getStationsData with device_id and get_favorites', t => {
+            const options = {
+                device_id: getTestParameters().weatherDeviceId,
+                get_favorites: true,
+            };
+            return apiCallAsync(t.context.api, t.context.api.getStationsData, options).then(result => {
+                t.assert(result);
+                t.assert(Array.isArray(result));
+                t.regex(result[0]._id, regexMacAddr, "[0]._id is not a mac address")
+            }).catch(() => { t.fail(); });
+        });
+    }
 }
 
 // @ts-ignore
@@ -269,8 +309,8 @@ if (getTestParameters().homeId) {
         return apiCallAsync(t.context.api, t.context.api.homeStatus, { home_id: getTestParameters().homeId }).then(result => {
             t.assert(result);
             t.assert(result.home);
+            if (verbose) { t.log(result.home); }
             t.assert(result.home.id);
-            // console.log(result.home);
         }).catch(() => { t.fail(); });
     });
 }
@@ -289,44 +329,46 @@ if (getTestParameters().homeId) {
     });
 }
 
-if (getTestParameters().homeId) {
-    // @ts-ignore
-    test.serial('setRoomThermPoint with home_id', t => {
-        const options = {
-            home_id: getTestParameters().homeId,
-        };
-        return apiCallAsync(t.context.api, t.context.api.setRoomThermPoint, options).then(() => {
-            t.fail();
-        }).catch((error) => { t.is(error, 'setRoomThermPoint error: Missing parameters'); });
-    });
-}
+if (!velux) {
+    if (getTestParameters().homeId) {
+        // @ts-ignore
+        test.serial('setRoomThermPoint with home_id', t => {
+            const options = {
+                home_id: getTestParameters().homeId,
+            };
+            return apiCallAsync(t.context.api, t.context.api.setRoomThermPoint, options).then(() => {
+                t.fail();
+            }).catch((error) => { t.is(error, 'setRoomThermPoint error: Missing parameters'); });
+        });
+    }
 
-if (getTestParameters().homeId && getTestParameters().roomId) {
-    // @ts-ignore
-    test.serial('setRoomThermPoint with home_id and room_id', t => {
-        const options = {
-            home_id: getTestParameters().homeId,
-            room_id: getTestParameters().roomId,
-        };
-        return apiCallAsync(t.context.api, t.context.api.setRoomThermPoint, options).then(() => {
-            t.fail();
-        }).catch((error) => { t.is(error, 'setRoomThermPoint error: Missing parameters'); });
-    });
-}
+    if (getTestParameters().homeId && getTestParameters().roomId) {
+        // @ts-ignore
+        test.serial('setRoomThermPoint with home_id and room_id', t => {
+            const options = {
+                home_id: getTestParameters().homeId,
+                room_id: getTestParameters().roomId,
+            };
+            return apiCallAsync(t.context.api, t.context.api.setRoomThermPoint, options).then(() => {
+                t.fail();
+            }).catch((error) => { t.is(error, 'setRoomThermPoint error: Missing parameters'); });
+        });
+    }
 
-if (getTestParameters().homeId && getTestParameters().roomId) {
-    // @ts-ignore
-    test.serial('setRoomThermPoint with home_id and room_id and mode', t => {
-        const options = {
-            home_id: getTestParameters().homeId,
-            room_id: getTestParameters().roomId,
-            mode: 'home',
-        };
-        return apiCallAsync(t.context.api, t.context.api.setRoomThermPoint, options).then((result) => {
-            t.assert(result);
-            t.is(result.status, 'ok');
-        }).catch(() => { t.fail(); });
-    });
+    if (getTestParameters().homeId && getTestParameters().roomId) {
+        // @ts-ignore
+        test.serial('setRoomThermPoint with home_id and room_id and mode', t => {
+            const options = {
+                home_id: getTestParameters().homeId,
+                room_id: getTestParameters().roomId,
+                mode: 'home',
+            };
+            return apiCallAsync(t.context.api, t.context.api.setRoomThermPoint, options).then((result) => {
+                t.assert(result);
+                t.is(result.status, 'ok');
+            }).catch(() => { t.fail(); });
+        });
+    }
 }
 
 if (getTestParameters().homeId) {
