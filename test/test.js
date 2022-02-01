@@ -116,10 +116,11 @@ test.serial('homesData without home_id and NXG', t => {
         if (verbose) { t.log(result.homes); }
         t.assert(Array.isArray(result.homes[0].rooms));
         if (verbose) { t.log(result.homes[0].rooms); }
-        t.assert(Array.isArray(result.homes[0].modules));
-        if (verbose) { t.log(result.homes[0].modules); }
-        t.assert(Array.isArray(result.homes[0].modules[0].capabilities));
-        if (verbose) { t.log(result.homes[0].modules[0].capabilities); }
+        if (Array.isArray(result.homes[0].modules)) {
+            if (verbose) { t.log(result.homes[0].modules); }
+            t.assert(Array.isArray(result.homes[0].modules[0].capabilities));
+            if (verbose) { t.log(result.homes[0].modules[0].capabilities); }
+        }
     }).catch(() => { t.fail(); });
 });
 
