@@ -5,19 +5,21 @@ var moment = require('moment');
 
 const BASE_URL = 'https://api.netatmo.net';
 
-var username;
-var password;
-var client_id;
-var client_secret;
-var scope;
-var access_token;
-var user_prefix; // 'velux' for velux active with netatmo devices
 /**
  * @constructor
  * @param args
  */
 var netatmo = function (args) {
   EventEmitter.call(this);
+  
+  this.username=null;
+  this.password=null;
+  this.client_id=null;
+  this.client_secret=null;
+  this.scope=null;
+  this.access_token=null;
+  this.user_prefix=null; // 'velux' for velux active with netatmo devices
+
   this.authenticate(args);
 };
 
@@ -33,7 +35,7 @@ util.inherits(netatmo, EventEmitter);
  * @returns {Error}
  */
 netatmo.prototype.handleRequestError = function (err, response, body, message, critical) {
-  var errorMessage = "";
+  var errorMessage = {};
   if (body && response.headers["content-type"].trim().toLowerCase().indexOf("application/json") !== -1) {
     errorMessage = JSON.parse(body);
     errorMessage = errorMessage && (errorMessage.error.message || errorMessage.error);
@@ -65,7 +67,7 @@ netatmo.prototype.authenticate = function (args, callback) {
   }
 
   if (args.access_token) {
-    access_token = args.access_token;
+    this.access_token = args.access_token;
     return this;
   }
 
@@ -89,20 +91,20 @@ netatmo.prototype.authenticate = function (args, callback) {
     return this;
   }
 
-  username = args.username;
-  password = args.password;
-  client_id = args.client_id;
-  client_secret = args.client_secret;
-  user_prefix = args.user_prefix;
-  scope = args.scope || 'read_station read_thermostat write_thermostat read_camera write_camera access_camera read_presence access_presence read_smokedetector read_homecoach';
+  this.username = args.username;
+  this.password = args.password;
+  this.client_id = args.client_id;
+  this.client_secret = args.client_secret;
+  this.user_prefix = args.user_prefix;
+  this.scope = args.scope || 'read_station read_thermostat write_thermostat read_camera write_camera access_camera read_presence access_presence read_smokedetector read_homecoach';
 
   var form = {
-    client_id: client_id,
-    client_secret: client_secret,
-    username: username,
-    password: password,
-    scope: scope,
-    user_prefix: user_prefix,
+    client_id: this.client_id,
+    client_secret: this.client_secret,
+    username: this.username,
+    password: this.password,
+    scope: this.scope,
+    user_prefix: this.user_prefix,
     grant_type: 'password',
   };
 
@@ -119,7 +121,7 @@ netatmo.prototype.authenticate = function (args, callback) {
 
     body = JSON.parse(body);
 
-    access_token = body.access_token;
+    this.access_token = body.access_token;
 
     if (body.expires_in) {
       // eslint-disable-next-line no-undef
@@ -148,8 +150,8 @@ netatmo.prototype.authenticate_refresh = function (refresh_token) {
   var form = {
     grant_type: 'refresh_token',
     refresh_token: refresh_token,
-    client_id: client_id,
-    client_secret: client_secret,
+    client_id: this.client_id,
+    client_secret: this.client_secret,
   };
 
   var url = util.format('%s/oauth2/token', BASE_URL);
@@ -165,7 +167,7 @@ netatmo.prototype.authenticate_refresh = function (refresh_token) {
 
     body = JSON.parse(body);
 
-    access_token = body.access_token;
+    this.access_token = body.access_token;
 
     if (body.expires_in) {
       // eslint-disable-next-line no-undef
@@ -186,7 +188,7 @@ netatmo.prototype.authenticate_refresh = function (refresh_token) {
  */
 netatmo.prototype.getStationsData = function (options, callback) {
   // Wait until authenticated.
-  if (!access_token) {
+  if (!this.access_token) {
     return this.on('authenticated', function () {
       this.getStationsData(options, callback);
     });
@@ -200,7 +202,7 @@ netatmo.prototype.getStationsData = function (options, callback) {
   var url = util.format('%s/api/getstationsdata', BASE_URL);
 
   var form = {
-    access_token: access_token,
+    access_token: this.access_token,
   };
 
   if (options) {
@@ -247,7 +249,7 @@ netatmo.prototype.getStationsData = function (options, callback) {
  */
 netatmo.prototype.getThermostatsData = function (options, callback) {
   // Wait until authenticated.
-  if (!access_token) {
+  if (!this.access_token) {
     return this.on('authenticated', function () {
       this.getThermostatsData(options, callback);
     });
@@ -258,7 +260,7 @@ netatmo.prototype.getThermostatsData = function (options, callback) {
     options = null;
   }
 
-  var url = util.format('%s/api/getthermostatsdata?access_token=%s', BASE_URL, access_token);
+  var url = util.format('%s/api/getthermostatsdata?access_token=%s', BASE_URL, this.access_token);
   if (options != null) {
     url = util.format(url + '&device_id=%s', options.device_id);
   }
@@ -296,7 +298,7 @@ netatmo.prototype.getThermostatsData = function (options, callback) {
  */
 netatmo.prototype.getMeasure = function (options, callback) {
   // Wait until authenticated.
-  if (!access_token) {
+  if (!this.access_token) {
     return this.on('authenticated', function () {
       this.getMeasure(options, callback);
     });
@@ -333,7 +335,7 @@ netatmo.prototype.getMeasure = function (options, callback) {
   var url = util.format('%s/api/getmeasure', BASE_URL);
 
   var form = {
-    access_token: access_token,
+    access_token: this.access_token,
     device_id: options.device_id,
     scale: options.scale,
     type: options.type,
@@ -418,7 +420,7 @@ netatmo.prototype.getMeasure = function (options, callback) {
  */
 netatmo.prototype.getRoomMeasure = function (options, callback) {
   // Wait until authenticated.
-  if (!access_token) {
+  if (!this.access_token) {
     return this.on('authenticated', function () {
       this.getRoomMeasure(options, callback);
     });
@@ -460,7 +462,7 @@ netatmo.prototype.getRoomMeasure = function (options, callback) {
   var url = util.format('%s/api/getroommeasure', BASE_URL);
 
   var form = {
-    access_token: access_token,
+    access_token: this.access_token,
     home_id: options.home_id,
     room_id: options.room_id,
     scale: options.scale,
@@ -542,7 +544,7 @@ netatmo.prototype.getRoomMeasure = function (options, callback) {
  */
 netatmo.prototype.setSyncSchedule = function (options, callback) {
   // Wait until authenticated.
-  if (!access_token) {
+  if (!this.access_token) {
     return this.on('authenticated', function () {
       this.setSyncSchedule(options, callback);
     });
@@ -576,7 +578,7 @@ netatmo.prototype.setSyncSchedule = function (options, callback) {
   var url = util.format('%s/api/syncschedule', BASE_URL);
 
   var form = {
-    access_token: access_token,
+    access_token: this.access_token,
     device_id: options.device_id,
     module_id: options.module_id,
     zones: options.zones,
@@ -616,7 +618,7 @@ netatmo.prototype.setSyncSchedule = function (options, callback) {
  */
 netatmo.prototype.setThermpoint = function (options, callback) {
   // Wait until authenticated.
-  if (!access_token) {
+  if (!this.access_token) {
     return this.on('authenticated', function () {
       this.setThermpoint(options, callback);
     });
@@ -645,7 +647,7 @@ netatmo.prototype.setThermpoint = function (options, callback) {
   var url = util.format('%s/api/setthermpoint', BASE_URL);
 
   var form = {
-    access_token: access_token,
+    access_token: this.access_token,
     device_id: options.device_id,
     module_id: options.module_id,
     setpoint_mode: options.setpoint_mode,
@@ -696,7 +698,7 @@ netatmo.prototype.setThermpoint = function (options, callback) {
  */
 netatmo.prototype.getHomeData = function (options, callback) {
   // Wait until authenticated.
-  if (!access_token) {
+  if (!this.access_token) {
     return this.on('authenticated', function () {
       this.getHomeData(options, callback);
     });
@@ -705,7 +707,7 @@ netatmo.prototype.getHomeData = function (options, callback) {
   var url = util.format('%s/api/gethomedata', BASE_URL);
 
   var form = {
-    access_token: access_token
+    access_token: this.access_token
   };
 
   if (options != null && callback == null) {
@@ -754,7 +756,7 @@ netatmo.prototype.getHomeData = function (options, callback) {
  */
 netatmo.prototype.getHomesData = function (options, callback) {
   // Wait until authenticated.
-  if (!access_token) {
+  if (!this.access_token) {
     return this.on('authenticated', function () {
       this.getHomesData(options, callback);
     });
@@ -763,7 +765,7 @@ netatmo.prototype.getHomesData = function (options, callback) {
   var url = util.format('%s/api/homesdata', BASE_URL);
 
   var form = {
-    access_token: access_token
+    access_token: this.access_token
   };
 
   if (options != null && callback == null) {
@@ -808,7 +810,7 @@ netatmo.prototype.getHomesData = function (options, callback) {
  */
 netatmo.prototype.getHomeStatus = function (options, callback) {
   // Wait until authenticated.
-  if (!access_token) {
+  if (!this.access_token) {
     return this.on('authenticated', function () {
       this.getHomeStatus(options, callback);
     });
@@ -822,7 +824,7 @@ netatmo.prototype.getHomeStatus = function (options, callback) {
   var url = util.format('%s/api/homestatus', BASE_URL);
 
   var form = {
-    access_token: access_token
+    access_token: this.access_token
   };
 
   if (options != null && callback == null) {
@@ -868,7 +870,7 @@ netatmo.prototype.getHomeStatus = function (options, callback) {
  */
 netatmo.prototype.getNextEvents = function (options, callback) {
   // Wait until authenticated.
-  if (!access_token) {
+  if (!this.access_token) {
     return this.on('authenticated', function () {
       this.getNextEvents(options, callback);
     });
@@ -892,7 +894,7 @@ netatmo.prototype.getNextEvents = function (options, callback) {
   var url = util.format('%s/api/getnextevents', BASE_URL);
 
   var form = {
-    access_token: access_token,
+    access_token: this.access_token,
     home_id: options.home_id,
     event_id: options.event_id,
   };
@@ -934,7 +936,7 @@ netatmo.prototype.getNextEvents = function (options, callback) {
  */
 netatmo.prototype.getLastEventOf = function (options, callback) {
   // Wait until authenticated.
-  if (!access_token) {
+  if (!this.access_token) {
     return this.on('authenticated', function () {
       this.getLastEventOf(options, callback);
     });
@@ -958,7 +960,7 @@ netatmo.prototype.getLastEventOf = function (options, callback) {
   var url = util.format('%s/api/getlasteventof', BASE_URL);
 
   var form = {
-    access_token: access_token,
+    access_token: this.access_token,
     home_id: options.home_id,
     person_id: options.person_id,
   };
@@ -1000,7 +1002,7 @@ netatmo.prototype.getLastEventOf = function (options, callback) {
  */
 netatmo.prototype.getEventsUntil = function (options, callback) {
   // Wait until authenticated.
-  if (!access_token) {
+  if (!this.access_token) {
     return this.on('authenticated', function () {
       this.getEventsUntil(options, callback);
     });
@@ -1024,7 +1026,7 @@ netatmo.prototype.getEventsUntil = function (options, callback) {
   var url = util.format('%s/api/geteventsuntil', BASE_URL);
 
   var form = {
-    access_token: access_token,
+    access_token: this.access_token,
     home_id: options.home_id,
     event_id: options.event_id,
   };
@@ -1062,7 +1064,7 @@ netatmo.prototype.getEventsUntil = function (options, callback) {
  */
 netatmo.prototype.getCameraPicture = function (options, callback) {
   // Wait until authenticated.
-  if (!access_token) {
+  if (!this.access_token) {
     return this.on('authenticated', function () {
       this.getCameraPicture(options, callback);
     });
@@ -1086,7 +1088,7 @@ netatmo.prototype.getCameraPicture = function (options, callback) {
   var url = util.format('%s/api/getcamerapicture', BASE_URL);
 
   var qs = {
-    access_token: access_token,
+    access_token: this.access_token,
     image_id: options.image_id,
     key: options.key,
   };
@@ -1096,7 +1098,7 @@ netatmo.prototype.getCameraPicture = function (options, callback) {
     method: "GET",
     qs: qs,
     encoding: null,
-    contentType: 'image/jpg'
+    //contentType: 'image/jpg' not allowed, see prototype
   }, function (err, response, body) {
     if (err || response.statusCode != 200) {
       return this.handleRequestError(err, response, body, "getCameraPicture error");
@@ -1123,7 +1125,7 @@ netatmo.prototype.getCameraPicture = function (options, callback) {
  */
 netatmo.prototype.getHealthyHomeCoachData = function (options, callback) {
   // Wait until authenticated.
-  if (!access_token) {
+  if (!this.access_token) {
     return this.on('authenticated', function () {
       this.getHealthyHomeCoachData(options, callback);
     });
@@ -1134,7 +1136,7 @@ netatmo.prototype.getHealthyHomeCoachData = function (options, callback) {
     options = null;
   }
 
-  var url = util.format('%s/api/gethomecoachsdata?access_token=%s', BASE_URL, access_token);
+  var url = util.format('%s/api/gethomecoachsdata?access_token=%s', BASE_URL, this.access_token);
   if (options != null) {
     url = util.format(url + '&device_id=%s', options.device_id);
   }
@@ -1172,7 +1174,7 @@ netatmo.prototype.getHealthyHomeCoachData = function (options, callback) {
  */
 netatmo.prototype.getPublicData = function (options, callback) {
   // Wait until authenticated.
-  if (!access_token) {
+  if (!this.access_token) {
     return this.on('authenticated', function () {
       this.getPublicData(options, callback);
     });
@@ -1207,14 +1209,15 @@ netatmo.prototype.getPublicData = function (options, callback) {
     options.required_data = options.required_data.join(',');
   }
 
-  // Remove any spaces from the type list if there is any.
-  options.required_data = options.required_data.replace(/\s/g, '').toLowerCase();
-
+  if (options.required_data) {
+    // Remove any spaces from the type list if there is any.
+    options.required_data = options.required_data.replace(/\s/g, '').toLowerCase();
+  }
 
   var url = util.format('%s/api/getpublicdata', BASE_URL);
 
   var form = {
-    access_token: access_token,
+    access_token: this.access_token,
     lat_ne: options.lat_ne,
     lon_ne: options.lon_ne,
     lat_sw: options.lat_sw,
@@ -1261,7 +1264,7 @@ netatmo.prototype.getPublicData = function (options, callback) {
  */
 netatmo.prototype.homesData = function (options, callback) {
   // Wait until authenticated.
-  if (!access_token) {
+  if (!this.access_token) {
     return this.on('authenticated', function () {
       this.homesData(options, callback);
     });
@@ -1275,7 +1278,7 @@ netatmo.prototype.homesData = function (options, callback) {
   var url = util.format('%s/api/homesdata', BASE_URL);
 
   var form = {
-    access_token: access_token,
+    access_token: this.access_token,
   };
 
   if (options) {
@@ -1319,7 +1322,7 @@ netatmo.prototype.homesData = function (options, callback) {
  */
 netatmo.prototype.homeStatus = function (options, callback) {
   // Wait until authenticated.
-  if (!access_token) {
+  if (!this.access_token) {
     return this.on('authenticated', function () {
       this.homeStatus(options, callback);
     });
@@ -1338,7 +1341,7 @@ netatmo.prototype.homeStatus = function (options, callback) {
   var url = util.format('%s/api/homestatus', BASE_URL);
 
   var form = {
-    access_token: access_token,
+    access_token: this.access_token,
     home_id: options.home_id,
   };
 
@@ -1380,7 +1383,7 @@ netatmo.prototype.homeStatus = function (options, callback) {
  */
 netatmo.prototype.setThermMode = function (options, callback) {
   // Wait until authenticated.
-  if (!access_token) {
+  if (!this.access_token) {
     return this.on('authenticated', function () {
       this.setThermMode(options, callback);
     });
@@ -1399,7 +1402,7 @@ netatmo.prototype.setThermMode = function (options, callback) {
   var url = util.format('%s/api/setthermmode', BASE_URL);
 
   var form = {
-    access_token: access_token,
+    access_token: this.access_token,
     home_id: options.home_id,
     mode: options.mode,
   };
@@ -1442,7 +1445,7 @@ netatmo.prototype.setThermMode = function (options, callback) {
  */
 netatmo.prototype.setRoomThermPoint = function (options, callback) {
   // Wait until authenticated.
-  if (!access_token) {
+  if (!this.access_token) {
     return this.on('authenticated', function () {
       this.setRoomThermPoint(options, callback);
     });
@@ -1461,7 +1464,7 @@ netatmo.prototype.setRoomThermPoint = function (options, callback) {
   var url = util.format('%s/api/setroomthermpoint', BASE_URL);
 
   var form = {
-    access_token: access_token,
+    access_token: this.access_token,
     home_id: options.home_id,
     room_id: options.room_id,
     mode: options.mode,
@@ -1508,7 +1511,7 @@ netatmo.prototype.setRoomThermPoint = function (options, callback) {
  */
 netatmo.prototype.setPersonAway = function (options, callback) {
   // Wait until authenticated.
-  if (!access_token) {
+  if (!this.access_token) {
     return this.on('authenticated', function () {
       this.setPersonAway(options, callback);
     });
@@ -1527,7 +1530,7 @@ netatmo.prototype.setPersonAway = function (options, callback) {
   var url = util.format('%s/api/setpersonsaway', BASE_URL);
 
   var form = {
-    access_token: access_token,
+    access_token: this.access_token,
     home_id: options.home_id,
   };
 
@@ -1567,7 +1570,7 @@ netatmo.prototype.setPersonAway = function (options, callback) {
  */
  netatmo.prototype.setState = function (options, callback) {
   // Wait until authenticated.
-  if (!access_token) {
+  if (!this.access_token) {
     return this.on('authenticated', function () {
       this.setState(options, callback);
     });
@@ -1612,11 +1615,10 @@ netatmo.prototype.setPersonAway = function (options, callback) {
   request({
     url: url,
     'auth': {
-      'bearer': access_token
+      'bearer': this.access_token
     },
     method: "POST",
     json: form,
-    contentType: 'charset=utf-8',
   }, function (err, response, body) {
     if (err || response.statusCode != 200) {
       return this.handleRequestError(err, response, body, "setState error");

@@ -22,8 +22,16 @@ const verbose = process.argv && process.argv[2] === '-v';
 const velux = getCredentials() && getCredentials().user_prefix && getCredentials().user_prefix === "velux";
 
 // @ts-ignore
+// beforeEach or test is required
+test.beforeEach('authenticate', t => {
+    const auth = getCredentials();
+    t.context.api = new netatmo(auth);
+    t.assert(t.context.api);
+});
+
+// @ts-ignore
 // test produces a "Uncaught exception in test.js" 
-test.serial.before('try authenticate without credentials', async t => {
+test('try authenticate without credentials', async t => {
     if (verbose) { t.log("Verbose output enabled"); }
     const auth = {
         "client_id": "",
@@ -37,14 +45,6 @@ test.serial.before('try authenticate without credentials', async t => {
     });
     t.is(error.message, 'Authenticate \'client_id\' not set.');
     t.pass();
-});
-
-// @ts-ignore
-// beforeEach or test.serial is required, two concurrent calls to netatmo are not possible!
-test.before('authenticate', t => {
-    const auth = getCredentials();
-    t.context.api = new netatmo(auth);
-    t.assert(t.context.api);
 });
 
 /**
@@ -82,7 +82,7 @@ function apiCallAsync(api, func, options = null) {
         }
         // @ts-ignore
         // eslint-disable-next-line no-unused-vars
-        process.on('uncaughtException', uncaughtExceptionHandler);
+        // to catch codeing errors: process.on('uncaughtException', uncaughtExceptionHandler);
 
         func.bind(api)(options, function (err, data) {
             process.removeListener('uncaughtException', uncaughtExceptionHandler);
@@ -97,7 +97,7 @@ function apiCallAsync(api, func, options = null) {
 }
 
 // @ts-ignore
-test.serial('homesData without home_id', t => {
+test('homesData without home_id', t => {
     return apiCallAsync(t.context.api, t.context.api.homesData).then(result => {
         t.assert(result);
         t.assert(Array.isArray(result.homes));
@@ -109,7 +109,7 @@ test.serial('homesData without home_id', t => {
 
 // Velux test with NGX
 // @ts-ignore
-test.serial('homesData without home_id and NXG', t => {
+test('homesData without home_id and NXG', t => {
     return apiCallAsync(t.context.api, t.context.api.homesData, { gateway_types: "NXG" }).then(result => {
         t.assert(result);
         t.assert(Array.isArray(result.homes));
@@ -126,7 +126,7 @@ test.serial('homesData without home_id and NXG', t => {
 
 
 // @ts-ignore
-test.serial('homesData with invalid home_id', t => {
+test('homesData with invalid home_id', t => {
     return apiCallAsync(t.context.api, t.context.api.homesData, { home_id: 1 }).then(() => {
         t.fail();
     }).catch(error => { t.is(error, 'homesData error: Forbidden access to home'); });
@@ -134,7 +134,7 @@ test.serial('homesData with invalid home_id', t => {
 
 if (getTestParameters().homeId) {
     // @ts-ignore
-    test.serial('homesData with home_id', t => {
+    test('homesData with home_id', t => {
         return apiCallAsync(t.context.api, t.context.api.homesData, { home_id: getTestParameters().homeId }).then((result) => {
             t.assert(result);
             t.assert(Array.isArray(result.homes));
@@ -147,7 +147,7 @@ if (getTestParameters().homeId) {
 
 if (!velux) {
     // @ts-ignore
-    test.serial('getStationsData without device_id', t => {
+    test('getStationsData without device_id', t => {
         return apiCallAsync(t.context.api, t.context.api.getStationsData).then(result => {
             // console.log(result);
             t.assert(result);
@@ -157,7 +157,7 @@ if (!velux) {
 
     if (getTestParameters().weatherDeviceId) {
         // @ts-ignore
-        test.serial('getStationsData with device_id', t => {
+        test('getStationsData with device_id', t => {
             const options = {
                 device_id: getTestParameters().weatherDeviceId,
             };
@@ -171,7 +171,7 @@ if (!velux) {
 
     if (getTestParameters().weatherDeviceId) {
         // @ts-ignore
-        test.serial('getStationsData with device_id and get_favorites', t => {
+        test('getStationsData with device_id and get_favorites', t => {
             const options = {
                 device_id: getTestParameters().weatherDeviceId,
                 get_favorites: true,
@@ -186,7 +186,7 @@ if (!velux) {
 }
 
 // @ts-ignore
-test.serial('getMeasure without device_id', t => {
+test('getMeasure without device_id', t => {
     return apiCallAsync(t.context.api, t.context.api.getMeasure, {}).then(() => {
         t.fail();
     }).catch(error => { t.is(error, 'getMeasure \'device_id\' not set.'); });
@@ -195,7 +195,7 @@ test.serial('getMeasure without device_id', t => {
 
 if (getTestParameters().weatherDeviceId) {
     // @ts-ignore
-    test.serial('getMeasure with scale max and complete type array', t => {
+    test('getMeasure with scale max and complete type array', t => {
         const options = {
             device_id: getTestParameters().weatherDeviceId,
             scale: 'max',
@@ -212,7 +212,7 @@ if (getTestParameters().weatherDeviceId) {
 
 if (getTestParameters().weatherDeviceId) {
     // @ts-ignore
-    test.serial('getThermostatsData with Weather Device', t => {
+    test('getThermostatsData with Weather Device', t => {
         const options = {
             device_id: getTestParameters().weatherDeviceId,
         };
@@ -226,7 +226,7 @@ if (getTestParameters().weatherDeviceId) {
 device_id type is unknown function is deprecated by netatmo
 if (getTestParameters().energyRelayDeviceId) {
     // @ts-ignore
-    test.serial('getThermostatsData with EnergyRelayDevice Device', t => {
+    test('getThermostatsData with EnergyRelayDevice Device', t => {
         const options = {
             device_id: getTestParameters().energyRelayDeviceId,
         };
@@ -240,7 +240,7 @@ if (getTestParameters().energyRelayDeviceId) {
 */
 
 // @ts-ignore
-test.serial('getRoomMeasure without home_id', t => {
+test('getRoomMeasure without home_id', t => {
     return apiCallAsync(t.context.api, t.context.api.getRoomMeasure, {}).then(() => {
         t.fail();
     }).catch(error => { t.is(error, 'getRoomMeasure \'home_id\' not set.'); });
@@ -248,7 +248,7 @@ test.serial('getRoomMeasure without home_id', t => {
 
 if (getTestParameters().homeId) {
     // @ts-ignore
-    test.serial('getRoomMeasure with home_id', t => {
+    test('getRoomMeasure with home_id', t => {
         return apiCallAsync(t.context.api, t.context.api.getRoomMeasure, { home_id: getTestParameters().homeId }).then(() => {
             t.fail();
         }).catch(error => { t.is(error, 'getRoomMeasure \'room_id\' not set.'); });
@@ -257,7 +257,7 @@ if (getTestParameters().homeId) {
 
 if (getTestParameters().homeId && getTestParameters().roomId) {
     // @ts-ignore
-    test.serial('getRoomMeasure with home_id and room_id', t => {
+    test('getRoomMeasure with home_id and room_id', t => {
         const options = {
             home_id: getTestParameters().homeId,
             room_id: getTestParameters().roomId,
@@ -270,7 +270,7 @@ if (getTestParameters().homeId && getTestParameters().roomId) {
 
 if (getTestParameters().homeId && getTestParameters().roomId) {
     // @ts-ignore
-    test.serial('getRoomMeasure with home_id and room_id and scale', t => {
+    test('getRoomMeasure with home_id and room_id and scale', t => {
         const options = {
             home_id: getTestParameters().homeId,
             room_id: getTestParameters().roomId,
@@ -284,7 +284,7 @@ if (getTestParameters().homeId && getTestParameters().roomId) {
 
 if (getTestParameters().homeId && getTestParameters().roomId) {
     // @ts-ignore
-    test.serial('getRoomMeasure with home_id and room_id and scale and type', t => {
+    test('getRoomMeasure with home_id and room_id and scale and type', t => {
         const options = {
             home_id: getTestParameters().homeId,
             room_id: getTestParameters().roomId,
@@ -298,7 +298,7 @@ if (getTestParameters().homeId && getTestParameters().roomId) {
 }
 
 // @ts-ignore
-test.serial('homeStatus without options', t => {
+test('homeStatus without options', t => {
     return apiCallAsync(t.context.api, t.context.api.homeStatus).then(() => {
         t.fail();
     }).catch(error => { t.is(error, 'homeStatus \'options\' not set.'); });
@@ -306,7 +306,7 @@ test.serial('homeStatus without options', t => {
 
 if (getTestParameters().homeId) {
     // @ts-ignore
-    test.serial('homeStatus with home_id', t => {
+    test('homeStatus with home_id', t => {
         return apiCallAsync(t.context.api, t.context.api.homeStatus, { home_id: getTestParameters().homeId }).then(result => {
             t.assert(result);
             t.assert(result.home);
@@ -318,7 +318,7 @@ if (getTestParameters().homeId) {
 
 if (getTestParameters().homeId) {
     // @ts-ignore
-    test.serial('setThermMode with home_id', t => {
+    test('setThermMode with home_id', t => {
         const options = {
             home_id: getTestParameters().homeId,
             mode: 'schedule',
@@ -333,7 +333,7 @@ if (getTestParameters().homeId) {
 if (!velux) {
     if (getTestParameters().homeId) {
         // @ts-ignore
-        test.serial('setRoomThermPoint with home_id', t => {
+        test('setRoomThermPoint with home_id', t => {
             const options = {
                 home_id: getTestParameters().homeId,
             };
@@ -345,7 +345,7 @@ if (!velux) {
 
     if (getTestParameters().homeId && getTestParameters().roomId) {
         // @ts-ignore
-        test.serial('setRoomThermPoint with home_id and room_id', t => {
+        test('setRoomThermPoint with home_id and room_id', t => {
             const options = {
                 home_id: getTestParameters().homeId,
                 room_id: getTestParameters().roomId,
@@ -358,7 +358,7 @@ if (!velux) {
 
     if (getTestParameters().homeId && getTestParameters().roomId) {
         // @ts-ignore
-        test.serial('setRoomThermPoint with home_id and room_id and mode', t => {
+        test('setRoomThermPoint with home_id and room_id and mode', t => {
             const options = {
                 home_id: getTestParameters().homeId,
                 room_id: getTestParameters().roomId,
@@ -374,7 +374,7 @@ if (!velux) {
 
 if (getTestParameters().homeId) {
     // @ts-ignore
-    test.serial('setPersonAway with home_id and invalid person_id', t => {
+    test('setPersonAway with home_id and invalid person_id', t => {
         const options = {
             home_id: getTestParameters().homeId,
             person_id: 'xxx',
@@ -387,7 +387,7 @@ if (getTestParameters().homeId) {
 
 if (getTestParameters().homeId) {
     // @ts-ignore
-    test.serial('setPersonAway with home_id and empty person_id', t => {
+    test('setPersonAway with home_id and empty person_id', t => {
         const options = {
             home_id: getTestParameters().homeId,
             person_id: '',
@@ -401,7 +401,7 @@ if (getTestParameters().homeId) {
 
 if (getTestParameters().aircareDeviceId) {
     // @ts-ignore
-    test.serial('getHealthyHomeCoachData with Aircare Device', t => {
+    test('getHealthyHomeCoachData with Aircare Device', t => {
         const options = {
             device_id: getTestParameters().aircareDeviceId,
         };
@@ -413,7 +413,7 @@ if (getTestParameters().aircareDeviceId) {
 
 if (velux && getTestParameters().homeId && getTestParameters().windowId) {
     // @ts-ignore
-    test.serial('setState with home_id and module_id', t => {
+    test('setState with home_id and module_id', t => {
         const options = {
             home_id: getTestParameters().homeId,
             module_id: getTestParameters().windowId,
@@ -428,7 +428,7 @@ if (velux && getTestParameters().homeId && getTestParameters().windowId) {
 }
 
 // @ts-ignore
-test.serial('getPublicData with Invalid coordinates and rain', t => {
+test('getPublicData with Invalid coordinates and rain', t => {
     return apiCallAsync(t.context.api, t.context.api.getPublicData, { lat_ne: 1, lon_ne: 2, lat_sw: 3, lon_sw: 4, required_data: ['rain'] }).then(() => {
         t.fail();
     }).catch(error => { t.is(error, 'getPublicData error: Invalid coordinates given'); });
@@ -437,7 +437,7 @@ test.serial('getPublicData with Invalid coordinates and rain', t => {
 // Lese eine öffentliche Station
 
 // @ts-ignore
-test.serial('getPublicData with coordinates and temperature', t => {
+test('getPublicData with coordinates and temperature', t => {
     return apiCallAsync(t.context.api, t.context.api.getPublicData, { lat_ne: 39.6, lon_ne: 3.4, lat_sw: 39.5, lon_sw: 3.3, required_data: ['temperature'] }).then(result => {
         t.assert(result);
         // console.log(result);
@@ -448,12 +448,11 @@ test.serial('getPublicData with coordinates and temperature', t => {
 });
 
 // @ts-ignore
-// fails with TypeError as uncaughtException, so all getPublicData must be serial
-// and this must be the last one
-test.serial.failing('getPublicData without required_data', t => {
+test('getPublicData without required_data', t => {
     return apiCallAsync(t.context.api, t.context.api.getPublicData, { lat_ne: 39.6, lon_ne: 3.4, lat_sw: 39.5, lon_sw: 3.3 }).then(result => {
         t.assert(result);
-        t.assert(Array.isArray(result.homes));
+        t.assert(Array.isArray(result));
+        if (verbose) { t.log(result); }
     }).catch(() => { t.fail(); });
 });
 
