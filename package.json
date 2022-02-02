@@ -1,10 +1,10 @@
 {
   "name": "netatmo",
-  "version": "2.4.0",
+  "version": "2.3.0",
   "description": "A node.js module to hook into the netatmo API.",
   "main": "netatmo.js",
   "scripts": {
-    "test": "node test.js"
+    "test": "ava"
   },
   "author": {
     "name": "Ali Karbassi",
@@ -24,7 +24,13 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "moment": "^2.29.1",
-    "request": "^2.88.2"
+    "moment": "^2.22.2",
+    "request": "^2.85.0"
+  },
+  "devDependencies": {
+    "ava": "^4.0.1",
+    "eslint": "^8.7.0",
+    "eslint-plugin-ava": "^13.2.0",
+    "request-debug": "^0.2.0"
   }
 }
