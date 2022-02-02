@@ -411,6 +411,22 @@ if (getTestParameters().aircareDeviceId) {
     });
 }
 
+if (velux && getTestParameters().homeId && getTestParameters().windowId) {
+    // @ts-ignore
+    test.serial('setState with home_id and module_id', t => {
+        const options = {
+            home_id: getTestParameters().homeId,
+            module_id: getTestParameters().windowId,
+            bridge: getTestParameters().veluxBridge,
+            target_position: 10, // 0 = close, other values for windows without function (errors: code: 9)
+        };
+        return apiCallAsync(t.context.api, t.context.api.setState, options).then((result) => {
+            t.is(result.status, 'ok');
+            if (verbose) { t.log(result); }
+        }).catch(() => { t.fail(); });
+    });
+}
+
 // @ts-ignore
 test.serial('getPublicData with Invalid coordinates and rain', t => {
     return apiCallAsync(t.context.api, t.context.api.getPublicData, { lat_ne: 1, lon_ne: 2, lat_sw: 3, lon_sw: 4, required_data: ['rain'] }).then(() => {

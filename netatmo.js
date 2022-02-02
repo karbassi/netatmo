@@ -1559,4 +1559,80 @@ netatmo.prototype.setPersonAway = function (options, callback) {
   return this;
 };
 
+/**
+ * @description To open, close and stop for velux active with netatmo devices
+ * @param options
+ * @param callback
+ * @returns {*}
+ */
+ netatmo.prototype.setState = function (options, callback) {
+  // Wait until authenticated.
+  if (!access_token) {
+    return this.on('authenticated', function () {
+      this.setState(options, callback);
+    });
+  }
+
+  if (!options) {
+    this.emit("error", new Error("setState 'options' not set."));
+    return this;
+  }
+
+  if (!options.home_id) {
+    this.emit("error", new Error("setState 'home_id' not set."));
+    return this;
+  }
+
+  if (!options.module_id && !options.room_id) {
+    this.emit("error", new Error("setState 'module_id' or 'room_id' not set."));
+    return this;
+  }
+
+  if (options.module_id && !options.bridge) {
+    this.emit("error", new Error("setState 'module_id' set and 'bridge' not set."));
+    return this;
+  }
+
+  var url = util.format('%s/api/setstate', BASE_URL);
+
+  var form = {
+    home: {
+      id: options.home_id,
+    }
+  };
+
+  if (options.module_id) {
+    form.home.modules = [ {
+      id: options.module_id,
+      bridge: options.bridge,
+      target_position: options.target_position, // 0 = close, other values for windows without function (errors: code: 9)
+     } ];
+  }
+
+  request({
+    url: url,
+    'auth': {
+      'bearer': access_token
+    },
+    method: "POST",
+    json: form,
+    contentType: 'charset=utf-8',
+  }, function (err, response, body) {
+    if (err || response.statusCode != 200) {
+      return this.handleRequestError(err, response, body, "setState error");
+    }
+
+    this.emit('set-setstate', err, body);
+
+    if (callback) {
+      return callback(err, body);
+    }
+
+    return this;
+
+  }.bind(this));
+
+  return this;
+};
+
 module.exports = netatmo;
