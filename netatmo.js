@@ -1,6 +1,6 @@
 var util = require('util');
 var EventEmitter = require("events").EventEmitter;
-var request = require('request');
+var request = require('urllib');
 var moment = require('moment');
 
 const BASE_URL = 'https://api.netatmo.net';
@@ -1334,7 +1334,7 @@ netatmo.prototype.homeStatus = function (options, callback) {
       form.device_types = options.device_types;
     }
   }
- 
+
   request({
     url: url,
     method: "POST",
@@ -1396,7 +1396,7 @@ netatmo.prototype.setThermMode = function (options, callback) {
       form.endtime = options.endtime;
     }
   }
- 
+
   request({
     url: url,
     method: "POST",
@@ -1462,7 +1462,7 @@ netatmo.prototype.setRoomThermPoint = function (options, callback) {
       form.endtime = options.endtime;
     }
   }
- 
+
   request({
     url: url,
     method: "POST",

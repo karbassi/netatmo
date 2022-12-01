@@ -1,6 +1,6 @@
 {
   "name": "netatmo",
-  "version": "2.4.0",
+  "version": "3.0.0",
   "description": "A node.js module to hook into the netatmo API.",
   "main": "netatmo.js",
   "scripts": {
@@ -12,19 +12,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/karbassi/netatmo.git"
+    "url": "git://github.com/mabunixda/netatmo.git"
   },
   "bugs": {
-    "url": "https://github.com/karbassi/netatmo/issues"
+    "url": "https://github.com/mabunixda/netatmo/issues"
   },
-  "homepage": "https://github.com/karbassi/netatmo",
+  "homepage": "https://github.com/mabunixda/netatmo",
   "keywords": [
     "netatmo",
     "netatmo api"
   ],
   "license": "MIT",
   "dependencies": {
-    "moment": "^2.29.1",
-    "request": "^2.88.2"
+    "moment": "^2.29.4",
+    "urllib": "^3.5.2"
   }
 }
