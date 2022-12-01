@@ -1,14 +1,14 @@
 {
-  "name": "netatmo",
-  "version": "3.0.0",
+  "name": "netatmo-r",
+  "version": "2.5.0",
   "description": "A node.js module to hook into the netatmo API.",
   "main": "netatmo.js",
   "scripts": {
     "test": "node test.js"
   },
   "author": {
-    "name": "Ali Karbassi",
-    "email": "ali@karbassi.com"
+    "name": "Martin Buchleitner",
+    "email": "martin@nitram.at"
   },
   "repository": {
     "type": "git",
